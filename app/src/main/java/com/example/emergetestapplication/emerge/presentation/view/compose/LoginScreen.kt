@@ -77,6 +77,7 @@ fun LoginScreen(
                     backgroundColor = colorResource(id = R.color.teal_700),
                     contentColor = Color.White,
                 ),
+            enabled = username.isNotBlank() && password.isNotBlank()
         ) {
             Text("Login")
         }
