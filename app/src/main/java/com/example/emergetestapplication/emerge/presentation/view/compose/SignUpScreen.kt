@@ -47,7 +47,7 @@ fun SignUpScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Please Sign up to access movies",
+            text = "Please Sign Up to Access Movies",
             color = Color.Black,
             fontSize = 20.sp,
             maxLines = 1

@@ -47,7 +47,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Please login to continue",
+            text = "Please Login to Continue",
             color = Color.Black,
             fontSize = 20.sp,
             maxLines = 1
