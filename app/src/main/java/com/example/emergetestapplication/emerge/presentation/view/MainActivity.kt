@@ -1,4 +1,4 @@
-package com.example.emergetestapplication.emerge.presentation
+package com.example.emergetestapplication.emerge.presentation.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

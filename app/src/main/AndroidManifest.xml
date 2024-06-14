@@ -14,7 +14,7 @@
         android:theme="@style/Theme.EmergeTestApplication"
         tools:targetApi="31">
         <activity
-            android:name=".emerge.presentation.MainActivity"
+            android:name=".emerge.presentation.view.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.EmergeTestApplication">

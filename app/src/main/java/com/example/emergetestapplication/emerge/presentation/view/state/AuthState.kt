@@ -1,4 +1,4 @@
-package com.example.emergetestapplication.emerge.presentation.view.compose
+package com.example.emergetestapplication.emerge.presentation.view.state
 
 import com.example.emergetestapplication.emerge.data.model.User
 

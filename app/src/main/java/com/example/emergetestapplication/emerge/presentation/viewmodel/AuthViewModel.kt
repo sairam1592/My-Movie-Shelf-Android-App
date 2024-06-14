@@ -6,7 +6,7 @@ import com.example.emergetestapplication.emerge.data.model.User
 import com.example.emergetestapplication.emerge.domain.usecase.LoginUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.LogoutUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.SignUpUseCase
-import com.example.emergetestapplication.emerge.presentation.view.compose.AuthState
+import com.example.emergetestapplication.emerge.presentation.view.state.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
