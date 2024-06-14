@@ -3,10 +3,8 @@ package com.example.emergetestapplication.emerge.presentation.view.compose
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -19,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.emergetestapplication.R
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
@@ -36,12 +35,19 @@ fun StartUpScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
+        Text(
+            text = "Welcome to Movie App",
+            color = Color.Black,
+            fontSize = 20.sp,
+            maxLines = 1
+        )
+
         Button(
             onClick = onNavigateToLogin,
             modifier =
             Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
+                    .padding(top = 30.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
+                    .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
@@ -51,13 +57,12 @@ fun StartUpScreen(
         ) {
             Text("LOGIN")
         }
-        Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = onNavigateToSignUp,
             modifier =
             Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
+                    .padding(top = 10.dp, start = 16.dp, end = 16.dp)
+                    .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(

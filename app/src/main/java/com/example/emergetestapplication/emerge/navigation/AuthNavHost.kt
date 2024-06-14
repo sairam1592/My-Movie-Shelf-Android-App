@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.emergetestapplication.emerge.presentation.view.compose.LoginScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.SignUpScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.StartUpScreen
 import com.example.emergetestapplication.emerge.presentation.viewmodel.AuthViewModel
@@ -14,11 +15,8 @@ sealed class Screen(
     val route: String,
 ) {
     object Startup : Screen("startup")
-
     object Login : Screen("login")
-
     object Signup : Screen("signup")
-
     object Home : Screen("home")
 }
 
@@ -44,6 +42,18 @@ fun AuthNavHost(
                 onSignUpSuccess = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Signup.route) { inclusive = true }
+                    }
+                },
+            )
+        }
+
+        composable(Screen.Login.route) {
+            LoginScreen(
+                authState = authState,
+                onLogin = { username, password -> authViewModel.login(username, password) },
+                onLoginSuccess = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 },
             )

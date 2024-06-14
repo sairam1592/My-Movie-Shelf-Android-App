@@ -29,10 +29,10 @@ import com.example.emergetestapplication.R
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
 @Composable
-fun SignUpScreen(
+fun LoginScreen(
     authState: AuthState,
-    onSignUp: (String, String) -> Unit,
-    onSignUpSuccess: () -> Unit,
+    onLogin: (String, String) -> Unit,
+    onLoginSuccess: () -> Unit,
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -47,7 +47,7 @@ fun SignUpScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Please Sign up to access movies",
+            text = "Please login to continue",
             color = Color.Black,
             fontSize = 20.sp,
             maxLines = 1
@@ -62,32 +62,29 @@ fun SignUpScreen(
         )
         TextField(
             modifier = Modifier.padding(top = 25.dp),
-            shape = RoundedCornerShape(4.dp),
             value = password,
             onValueChange = { password = it },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
+            shape = RoundedCornerShape(4.dp),
         )
         Button(
-            onClick = { onSignUp(username, password) },
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                shape = RoundedCornerShape(16.dp),
+            onClick = { onLogin(username, password) },
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(id = R.color.teal_700),
                     contentColor = Color.White,
                 ),
         ) {
-            Text("Sign Up")
+            Text("Login")
         }
         if (authState.isLoading) {
             CircularProgressIndicator()
         }
         if (authState.isAuthenticated) {
-            onSignUpSuccess()
+            onLoginSuccess()
         }
         if (authState.errorMessage != null) {
             Text(text = authState.errorMessage, color = Color.Red)
@@ -99,6 +96,6 @@ fun SignUpScreen(
 @Composable
 private fun SignUpScreenPreview() {
     EmergeTestApplicationTheme {
-        SignUpScreen(authState = AuthState(), onSignUp = { _, _ -> }, onSignUpSuccess = { })
+        LoginScreen(authState = AuthState(), onLogin = { _, _ -> }, onLoginSuccess = {})
     }
 }
