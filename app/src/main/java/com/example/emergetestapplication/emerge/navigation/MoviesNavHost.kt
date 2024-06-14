@@ -11,6 +11,7 @@ import com.example.emergetestapplication.emerge.presentation.view.compose.LoginS
 import com.example.emergetestapplication.emerge.presentation.view.compose.SignUpScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.StartUpScreen
 import com.example.emergetestapplication.emerge.presentation.viewmodel.AuthViewModel
+import com.example.emergetestapplication.emerge.presentation.viewmodel.MoviesViewModel
 
 sealed class Screen(
     val route: String,
@@ -22,11 +23,13 @@ sealed class Screen(
 }
 
 @Composable
-fun AuthNavHost(
+fun MoviesNavHost(
     navController: NavHostController,
     authViewModel: AuthViewModel,
+    moviesViewModel: MoviesViewModel,
 ) {
     val authState by authViewModel.authState.collectAsStateWithLifecycle()
+    val moviesState by moviesViewModel.moviesState.collectAsStateWithLifecycle()
 
     NavHost(navController = navController, startDestination = Screen.Startup.route) {
         composable(Screen.Startup.route) {
@@ -63,12 +66,14 @@ fun AuthNavHost(
         composable(Screen.Home.route) {
             HomeScreen(
                 authState = authState,
+                moviesState = moviesState,
                 onLogout = { authViewModel.logout() },
                 onLogoutSuccess = {
                     navController.navigate(Screen.Startup.route) {
                         popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 },
+                onGetPopularMovies = { moviesViewModel.getPopularMovies() },
             )
         }
     }

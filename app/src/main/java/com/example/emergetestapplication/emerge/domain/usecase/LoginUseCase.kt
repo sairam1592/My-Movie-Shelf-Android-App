@@ -1,7 +1,7 @@
 package com.example.emergetestapplication.emerge.domain.usecase
 
-import com.example.emergetestapplication.emerge.data.model.User
-import com.example.emergetestapplication.emerge.data.repository.AuthRepository
+import com.example.emergetestapplication.emerge.data.model.user.User
+import com.example.emergetestapplication.emerge.data.repository.authentication.AuthRepository
 import javax.inject.Inject
 
 class LoginUseCase

@@ -2,7 +2,7 @@ package com.example.emergetestapplication.emerge.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.emergetestapplication.emerge.data.model.User
+import com.example.emergetestapplication.emerge.data.model.user.User
 import com.example.emergetestapplication.emerge.domain.usecase.LoginUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.LogoutUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.SignUpUseCase

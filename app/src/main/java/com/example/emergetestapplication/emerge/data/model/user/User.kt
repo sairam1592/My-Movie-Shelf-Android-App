@@ -1,4 +1,4 @@
-package com.example.emergetestapplication.emerge.data.model
+package com.example.emergetestapplication.emerge.data.model.user
 
 data class User(
     val username: String,

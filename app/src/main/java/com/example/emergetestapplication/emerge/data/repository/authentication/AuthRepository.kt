@@ -1,6 +1,6 @@
-package com.example.emergetestapplication.emerge.data.repository
+package com.example.emergetestapplication.emerge.data.repository.authentication
 
-import com.example.emergetestapplication.emerge.data.model.User
+import com.example.emergetestapplication.emerge.data.model.user.User
 
 interface AuthRepository {
     suspend fun signUp(username: String, password: String): Result<Unit>

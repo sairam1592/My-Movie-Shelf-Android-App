@@ -5,9 +5,15 @@ import androidx.room.Room
 import com.example.emergetestapplication.emerge.AppDatabase
 import com.example.emergetestapplication.emerge.data.datasource.local.AuthLocalDataSource
 import com.example.emergetestapplication.emerge.data.datasource.local.AuthLocalDataSourceImpl
+import com.example.emergetestapplication.emerge.data.datasource.remote.MoviesRemoteDataSource
+import com.example.emergetestapplication.emerge.data.datasource.remote.MoviesRemoteDataSourceImpl
 import com.example.emergetestapplication.emerge.data.model.db.UserDao
-import com.example.emergetestapplication.emerge.data.repository.AuthRepository
-import com.example.emergetestapplication.emerge.data.repository.AuthRepositoryImpl
+import com.example.emergetestapplication.emerge.data.network.APIService
+import com.example.emergetestapplication.emerge.data.repository.authentication.AuthRepository
+import com.example.emergetestapplication.emerge.data.repository.authentication.AuthRepositoryImpl
+import com.example.emergetestapplication.emerge.data.repository.movies.MovieRepository
+import com.example.emergetestapplication.emerge.data.repository.movies.MovieRepositoryImpl
+import com.example.emergetestapplication.emerge.domain.usecase.GetPopularMoviesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,4 +47,16 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAuthRepository(localDataSource: AuthLocalDataSource): AuthRepository = AuthRepositoryImpl(localDataSource)
+
+    @Provides
+    @Singleton
+    fun provideRemoteDataSource(apiService: APIService): MoviesRemoteDataSource = MoviesRemoteDataSourceImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun provideMovieRepository(remoteDataSource: MoviesRemoteDataSource): MovieRepository = MovieRepositoryImpl(remoteDataSource)
+
+    @Provides
+    @Singleton
+    fun provideGetPopularMoviesUseCase(movieRepository: MovieRepository): GetPopularMoviesUseCase = GetPopularMoviesUseCase(movieRepository)
 }

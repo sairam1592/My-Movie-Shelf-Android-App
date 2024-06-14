@@ -1,6 +1,6 @@
 package com.example.emergetestapplication.emerge.domain.mapper
 
-import com.example.emergetestapplication.emerge.data.model.User
+import com.example.emergetestapplication.emerge.data.model.user.User
 import com.example.emergetestapplication.emerge.data.model.db.UserEntity
 
 object UserEntityToModelMapper {

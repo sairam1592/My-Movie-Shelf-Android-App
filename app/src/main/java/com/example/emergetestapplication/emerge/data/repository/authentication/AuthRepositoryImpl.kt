@@ -1,7 +1,8 @@
-package com.example.emergetestapplication.emerge.data.repository
+package com.example.emergetestapplication.emerge.data.repository.authentication
 
 import com.example.emergetestapplication.emerge.data.datasource.local.AuthLocalDataSource
-import com.example.emergetestapplication.emerge.data.model.User
+import com.example.emergetestapplication.emerge.data.model.user.User
+import com.example.emergetestapplication.emerge.data.repository.authentication.AuthRepository
 import javax.inject.Inject
 
 class AuthRepositoryImpl

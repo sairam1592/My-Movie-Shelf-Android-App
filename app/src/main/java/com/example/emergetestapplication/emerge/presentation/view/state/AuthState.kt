@@ -1,6 +1,6 @@
 package com.example.emergetestapplication.emerge.presentation.view.state
 
-import com.example.emergetestapplication.emerge.data.model.User
+import com.example.emergetestapplication.emerge.data.model.user.User
 
 data class AuthState(
     val isLoading: Boolean = false,
