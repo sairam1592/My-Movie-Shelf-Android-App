@@ -1,11 +1,12 @@
 package com.example.emergetestapplication.emerge.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.emergetestapplication.emerge.presentation.view.compose.HomeScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.LoginScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.SignUpScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.StartUpScreen
@@ -25,7 +26,7 @@ fun AuthNavHost(
     navController: NavHostController,
     authViewModel: AuthViewModel,
 ) {
-    val authState by authViewModel.authState.collectAsState()
+    val authState by authViewModel.authState.collectAsStateWithLifecycle()
 
     NavHost(navController = navController, startDestination = Screen.Startup.route) {
         composable(Screen.Startup.route) {
@@ -54,6 +55,18 @@ fun AuthNavHost(
                 onLoginSuccess = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                },
+            )
+        }
+
+        composable(Screen.Home.route) {
+            HomeScreen(
+                authState = authState,
+                onLogout = { authViewModel.logout() },
+                onLogoutSuccess = {
+                    navController.navigate(Screen.Startup.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 },
             )

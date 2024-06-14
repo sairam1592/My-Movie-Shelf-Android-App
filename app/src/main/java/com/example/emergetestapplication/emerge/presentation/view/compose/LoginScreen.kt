@@ -1,5 +1,6 @@
 package com.example.emergetestapplication.emerge.presentation.view.compose
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,13 +40,14 @@ fun LoginScreen(
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     Column(
         modifier =
-            Modifier
-                .background(color = colorResource(id = R.color.white))
-                .fillMaxSize()
-                .padding(16.dp),
+        Modifier
+            .background(color = colorResource(id = R.color.white))
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -71,7 +75,10 @@ fun LoginScreen(
         )
         Button(
             onClick = { onLogin(username, password) },
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
@@ -86,10 +93,14 @@ fun LoginScreen(
             CircularProgressIndicator()
         }
         if (authState.isAuthenticated) {
+            Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
             onLoginSuccess()
         }
-        if (authState.errorMessage != null) {
-            Text(text = authState.errorMessage, color = Color.Red)
+    }
+
+    LaunchedEffect(authState.errorMessage) {
+        authState.errorMessage?.let { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
 }

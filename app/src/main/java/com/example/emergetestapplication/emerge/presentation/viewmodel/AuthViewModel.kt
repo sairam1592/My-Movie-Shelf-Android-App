@@ -40,7 +40,7 @@ class AuthViewModel
                     _authState.value =
                         _authState.value.copy(
                             isLoading = false,
-                            errorMessage = exception.message ?: "Sign up failed",
+                            errorMessage = "Sign up failed",
                         )
                 }
             }
@@ -61,7 +61,7 @@ class AuthViewModel
                     _authState.value =
                         _authState.value.copy(
                             isLoading = false,
-                            errorMessage = exception.message ?: "Login failed",
+                            errorMessage = "Login failed",
                         )
                 }
             }
@@ -77,9 +77,9 @@ class AuthViewModel
             }.onFailure { exception ->
                 _authState.value = _authState.value.copy(
                     isLoading = false,
-                    errorMessage = exception.message ?: "Logout failed"
-                )
-            }
+                        errorMessage = "Logout failed",
+                    )
+                }
         }
     }
 }
