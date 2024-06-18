@@ -38,6 +38,8 @@ fun MoviesNavHost(
 ) {
     val authState by authViewModel.authState.collectAsStateWithLifecycle()
     val moviesState by moviesViewModel.moviesState.collectAsStateWithLifecycle()
+    val homeScreenState by moviesViewModel.homeScreenState.collectAsStateWithLifecycle()
+
     var selectedMovies by remember { mutableStateOf<List<Movie>>(emptyList()) }
 
     NavHost(navController = navController, startDestination = Screen.Startup.route) {
@@ -75,7 +77,7 @@ fun MoviesNavHost(
         composable(Screen.Home.route) {
             HomeScreen(
                 authState = authState,
-                moviesState = moviesState,
+                homeScreenState = homeScreenState,
                 onLogout = { authViewModel.logout() },
                 onLogoutSuccess = {
                     navController.navigate(Screen.Startup.route) {
@@ -84,6 +86,13 @@ fun MoviesNavHost(
                 },
                 onCreateListClick = { navController.navigate(Screen.CreateList.route) },
                 onSearchUsersClick = { },
+                onFetchUserCategories = {
+                    authState.user?.let { it1 ->
+                        moviesViewModel.getUserCategories(
+                            it1.username,
+                        )
+                    }
+                },
             )
         }
 

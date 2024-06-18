@@ -13,7 +13,9 @@ import com.example.emergetestapplication.emerge.data.repository.authentication.A
 import com.example.emergetestapplication.emerge.data.repository.authentication.AuthRepositoryImpl
 import com.example.emergetestapplication.emerge.data.repository.movies.MovieRepository
 import com.example.emergetestapplication.emerge.data.repository.movies.MovieRepositoryImpl
+import com.example.emergetestapplication.emerge.domain.usecase.AddCategoryToFireBaseDBUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.GetPopularMoviesUseCase
+import com.example.emergetestapplication.emerge.domain.usecase.GetUserCategoriesUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
@@ -55,7 +57,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRemoteDataSource(apiService: APIService): MoviesRemoteDataSource = MoviesRemoteDataSourceImpl(apiService)
+    fun provideRemoteDataSource(
+        apiService: APIService,
+        fireStore: FirebaseFirestore,
+    ): MoviesRemoteDataSource = MoviesRemoteDataSourceImpl(apiService, fireStore)
 
     @Provides
     @Singleton
@@ -64,4 +69,12 @@ object AppModule {
     @Provides
     @Singleton
     fun provideGetPopularMoviesUseCase(movieRepository: MovieRepository): GetPopularMoviesUseCase = GetPopularMoviesUseCase(movieRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetUserCategoriesUseCase(repository: MovieRepository): GetUserCategoriesUseCase = GetUserCategoriesUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideAddCategoryUseCase(repository: MovieRepository): AddCategoryToFireBaseDBUseCase = AddCategoryToFireBaseDBUseCase(repository)
 }

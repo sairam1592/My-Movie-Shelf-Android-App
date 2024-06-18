@@ -1,0 +1,28 @@
+package com.example.emergetestapplication.emerge.domain.mapper
+
+import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
+import com.example.emergetestapplication.emerge.data.model.movies.Movie
+
+object MovieMapper {
+    fun fromFbMovieModel(fbMovieModel: FbMovieModel): Movie =
+        Movie(
+            id = fbMovieModel.id,
+            title = fbMovieModel.title,
+            overview = fbMovieModel.overview,
+            poster_path = fbMovieModel.posterPath,
+            release_date = "",
+            vote_average = 0.0,
+        )
+
+    fun toFbMovieModelModel(movie: Movie): FbMovieModel =
+        FbMovieModel(
+            id = movie.id,
+            title = movie.title,
+            overview = movie.overview,
+            posterPath = movie.poster_path,
+        )
+
+    fun fromFbModelList(fbMovieModels: List<FbMovieModel>): List<Movie> = fbMovieModels.map { fromFbMovieModel(it) }
+
+    fun toFbModelList(movies: List<Movie>): List<FbMovieModel> = movies.map { toFbMovieModelModel(it) }
+}
