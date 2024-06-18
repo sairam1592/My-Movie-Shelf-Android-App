@@ -13,6 +13,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,6 +64,14 @@ fun SignUpScreen(
             onValueChange = { username = it },
             label = { Text("Username") },
             shape = RoundedCornerShape(4.dp),
+            colors =
+                TextFieldDefaults.textFieldColors(
+                    textColor = colorResource(id = R.color.black),
+                    focusedIndicatorColor = colorResource(id = R.color.teal_700),
+                    cursorColor = colorResource(id = R.color.teal_700),
+                    focusedLabelColor = colorResource(id = R.color.teal_700),
+                    unfocusedLabelColor = colorResource(id = R.color.teal_700),
+                ),
         )
         TextField(
             modifier = Modifier.padding(top = 25.dp),
@@ -71,6 +80,14 @@ fun SignUpScreen(
             onValueChange = { password = it },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
+            colors =
+                TextFieldDefaults.textFieldColors(
+                    textColor = colorResource(id = R.color.black),
+                    focusedIndicatorColor = colorResource(id = R.color.teal_700),
+                    cursorColor = colorResource(id = R.color.teal_700),
+                    focusedLabelColor = colorResource(id = R.color.teal_700),
+                    unfocusedLabelColor = colorResource(id = R.color.teal_700),
+            ),
         )
         Button(
             onClick = { onSignUp(username, password) },
@@ -89,7 +106,7 @@ fun SignUpScreen(
             Text("Sign Up")
         }
         if (authState.isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = colorResource(id = R.color.teal_700))
         }
         if (authState.isAuthenticated) {
             Toast.makeText(context, "Sign Up Successful", Toast.LENGTH_SHORT).show()

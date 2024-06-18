@@ -11,4 +11,6 @@ class MovieRepositoryImpl
         private val moviesRemoteDataSource: MoviesRemoteDataSource,
     ) : MovieRepository {
         override fun getPopularMovies(): Flow<Result<MovieResponse>> = moviesRemoteDataSource.getPopularMovies()
+
+        override fun searchMovies(query: String): Flow<Result<MovieResponse>> = moviesRemoteDataSource.searchMovies(query)
     }

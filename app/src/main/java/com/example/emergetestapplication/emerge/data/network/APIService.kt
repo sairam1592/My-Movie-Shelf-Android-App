@@ -10,4 +10,12 @@ interface APIService {
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1,
     ): MovieResponse
+
+    @GET("search/movie")
+    suspend fun searchMovies(
+        @Query("query") query: String,
+        @Query("include_adult") includeAdult: Boolean = false,
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+    ): MovieResponse
 }

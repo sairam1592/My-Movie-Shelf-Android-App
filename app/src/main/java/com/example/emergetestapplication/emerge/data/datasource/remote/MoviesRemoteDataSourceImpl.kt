@@ -17,4 +17,9 @@ class MoviesRemoteDataSourceImpl
             flow {
                 emit(Result.success(apiService.getPopularMovies()))
             }.flowOn(Dispatchers.IO)
+
+        override fun searchMovies(query: String): Flow<Result<MovieResponse>> =
+            flow {
+                emit(Result.success(apiService.searchMovies(query)))
+            }.flowOn(Dispatchers.IO)
     }

@@ -73,7 +73,8 @@ fun MoviesNavHost(
                         popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 },
-                onGetPopularMovies = { moviesViewModel.getPopularMovies() },
+                onCreateListClick = { },
+                onSearchUsersClick = { },
             )
         }
     }

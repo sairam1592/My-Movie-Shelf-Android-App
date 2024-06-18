@@ -13,6 +13,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -64,6 +65,14 @@ fun LoginScreen(
             onValueChange = { username = it },
             label = { Text("Username") },
             shape = RoundedCornerShape(4.dp),
+            colors =
+            TextFieldDefaults.textFieldColors(
+                textColor = colorResource(id = R.color.black),
+                focusedIndicatorColor = colorResource(id = R.color.teal_700),
+                cursorColor = colorResource(id = R.color.teal_700),
+                focusedLabelColor = colorResource(id = R.color.teal_700),
+                unfocusedLabelColor = colorResource(id = R.color.teal_700),
+            ),
         )
         TextField(
             modifier = Modifier.padding(top = 25.dp),
@@ -72,25 +81,33 @@ fun LoginScreen(
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             shape = RoundedCornerShape(4.dp),
+            colors =
+                TextFieldDefaults.textFieldColors(
+                    textColor = colorResource(id = R.color.black),
+                    focusedIndicatorColor = colorResource(id = R.color.teal_700),
+                    cursorColor = colorResource(id = R.color.teal_700),
+                    focusedLabelColor = colorResource(id = R.color.teal_700),
+                    unfocusedLabelColor = colorResource(id = R.color.teal_700),
+            ),
         )
         Button(
             onClick = { onLogin(username, password) },
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(id = R.color.teal_700),
                     contentColor = Color.White,
                 ),
-            enabled = username.isNotBlank() && password.isNotBlank()
+            enabled = username.isNotBlank() && password.isNotBlank(),
         ) {
             Text("Login")
         }
         if (authState.isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = colorResource(id = R.color.teal_700))
         }
         if (authState.isAuthenticated) {
             Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
