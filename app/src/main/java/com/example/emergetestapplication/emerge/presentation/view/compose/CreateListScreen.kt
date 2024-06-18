@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,7 +40,10 @@ import com.example.emergetestapplication.R
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
 @Composable
-fun CreateListScreen(onAddMoviesClick: () -> Unit) {
+fun CreateListScreen(
+    onAddMoviesClick: () -> Unit,
+    onSaveListClick: () -> Unit,
+) {
     var title by remember { mutableStateOf(TextFieldValue("")) }
     var emoji by remember { mutableStateOf(TextFieldValue("")) }
     var isListCreated by remember { mutableStateOf(false) }
@@ -108,6 +112,7 @@ fun CreateListScreen(onAddMoviesClick: () -> Unit) {
                 emoji = emoji.text,
                 title = title.text,
                 onAddMoviesClick = onAddMoviesClick,
+                onSaveListClick = onSaveListClick,
             )
         }
     }
@@ -118,6 +123,7 @@ fun MovieListItem(
     emoji: String,
     title: String,
     onAddMoviesClick: () -> Unit,
+    onSaveListClick: () -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -144,7 +150,7 @@ fun MovieListItem(
             )
 
             Text(
-                text = "Add your Favourite Top 5 Movies Here...",
+                text = "Add upto 5 movies to this list...",
                 color = Color.White,
                 fontSize = 14.sp,
                 maxLines = 2,
@@ -156,24 +162,39 @@ fun MovieListItem(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Button(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = onAddMoviesClick,
-                shape = RoundedCornerShape(16.dp),
-                colors =
-                    ButtonDefaults.buttonColors(
-                        backgroundColor = Color.White,
-                        contentColor = colorResource(id = R.color.teal_700),
-                    ),
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_add), // Ensure you have a plus icon drawable
-                    contentDescription = "Add Movies",
-                    tint = colorResource(id = R.color.teal_700),
-                    modifier = Modifier.size(24.dp),
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Add Movies")
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Button(
+                    onClick = onAddMoviesClick,
+                    shape = RoundedCornerShape(16.dp),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            backgroundColor = Color.White,
+                            contentColor = colorResource(id = R.color.teal_700),
+                        ),
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_add), // Ensure you have a plus icon drawable
+                        contentDescription = "Add Movies",
+                        tint = colorResource(id = R.color.teal_700),
+                        modifier = Modifier.size(20.dp),
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Add Movies")
+                }
+
+                Button(
+                    onClick = { onSaveListClick() },
+                    shape = RoundedCornerShape(16.dp),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            backgroundColor = Color.White,
+                            contentColor = colorResource(id = R.color.teal_700),
+                        ),
+                    modifier = Modifier.padding(start = 12.dp),
+                ) {
+                    Text(text = "Save List")
+                }
             }
         }
     }
@@ -183,7 +204,7 @@ fun MovieListItem(
 @Composable
 private fun CreateListScreenPreview() {
     EmergeTestApplicationTheme {
-        CreateListScreen(onAddMoviesClick = {})
+        CreateListScreen(onAddMoviesClick = {}, onSaveListClick = {})
     }
 }
 
@@ -191,6 +212,10 @@ private fun CreateListScreenPreview() {
 @Composable
 private fun MovieListItemPreview() {
     EmergeTestApplicationTheme {
-        MovieListItem(emoji = "", title = "My Favourite western movies", onAddMoviesClick = {})
+        MovieListItem(
+            emoji = "",
+            title = "My Favourite western movies",
+            onAddMoviesClick = {},
+            onSaveListClick = {})
     }
 }

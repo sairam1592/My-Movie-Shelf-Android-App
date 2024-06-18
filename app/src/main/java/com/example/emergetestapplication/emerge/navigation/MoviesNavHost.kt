@@ -84,6 +84,7 @@ fun MoviesNavHost(
         composable(Screen.CreateList.route) {
             CreateListScreen(
                 onAddMoviesClick = { },
+                onSaveListClick = { },
             )
         }
     }
