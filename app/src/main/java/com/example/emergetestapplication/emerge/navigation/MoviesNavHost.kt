@@ -2,13 +2,18 @@ package com.example.emergetestapplication.emerge.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.emergetestapplication.emerge.data.model.movies.Movie
 import com.example.emergetestapplication.emerge.presentation.view.compose.CreateListScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.HomeScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.LoginScreen
+import com.example.emergetestapplication.emerge.presentation.view.compose.SearchMoviesScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.SignUpScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.StartUpScreen
 import com.example.emergetestapplication.emerge.presentation.viewmodel.AuthViewModel
@@ -21,8 +26,8 @@ sealed class Screen(
     object Login : Screen("login")
     object Signup : Screen("signup")
     object Home : Screen("home")
-
     object CreateList : Screen("create_list")
+    object SearchMovie : Screen("search_movie")
 }
 
 @Composable
@@ -33,6 +38,7 @@ fun MoviesNavHost(
 ) {
     val authState by authViewModel.authState.collectAsStateWithLifecycle()
     val moviesState by moviesViewModel.moviesState.collectAsStateWithLifecycle()
+    var selectedMovies by remember { mutableStateOf<List<Movie>>(emptyList()) }
 
     NavHost(navController = navController, startDestination = Screen.Startup.route) {
         composable(Screen.Startup.route) {
@@ -83,8 +89,21 @@ fun MoviesNavHost(
 
         composable(Screen.CreateList.route) {
             CreateListScreen(
-                onAddMoviesClick = { },
+                onAddMoviesClick = { navController.navigate(Screen.SearchMovie.route) },
                 onSaveListClick = { },
+                selectedMovies = selectedMovies,
+            )
+        }
+
+        composable(Screen.SearchMovie.route) {
+            SearchMoviesScreen(
+                moviesState = moviesState,
+                searchMovies = { query -> moviesViewModel.searchMovies(query) },
+                onMovieSelected = { movie ->
+                    selectedMovies = selectedMovies + movie
+                    navController.popBackStack()
+                },
+                clearMoviesSearch = { moviesViewModel.clearMoviesSearch() },
             )
         }
     }

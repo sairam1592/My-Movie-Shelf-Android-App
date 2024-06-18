@@ -14,6 +14,7 @@ import com.example.emergetestapplication.emerge.data.repository.authentication.A
 import com.example.emergetestapplication.emerge.data.repository.movies.MovieRepository
 import com.example.emergetestapplication.emerge.data.repository.movies.MovieRepositoryImpl
 import com.example.emergetestapplication.emerge.domain.usecase.GetPopularMoviesUseCase
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +25,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    @Singleton
+    @Provides
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
     @Provides
     @Singleton
     fun provideDatabase(

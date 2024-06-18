@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -37,12 +39,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.emergetestapplication.R
+import com.example.emergetestapplication.emerge.data.model.movies.Movie
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
 @Composable
 fun CreateListScreen(
     onAddMoviesClick: () -> Unit,
     onSaveListClick: () -> Unit,
+    selectedMovies: List<Movie> = emptyList(),
 ) {
     var title by remember { mutableStateOf(TextFieldValue("")) }
     var emoji by remember { mutableStateOf(TextFieldValue("")) }
@@ -60,7 +64,7 @@ fun CreateListScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        if (!isListCreated) {
+        if (!isListCreated && selectedMovies.isEmpty()) {
             OutlinedTextField(
                 value = title,
                 onValueChange = { title = it },
@@ -104,27 +108,32 @@ fun CreateListScreen(
                         contentColor = Color.White,
                     ),
                 modifier = Modifier.fillMaxWidth(),
+                enabled = emoji.text.isNotEmpty() && title.text.isNotEmpty(),
             ) {
                 Text(text = "Create")
             }
         } else {
-            MovieListItem(
+            MyNewListItem(
                 emoji = emoji.text,
                 title = title.text,
                 onAddMoviesClick = onAddMoviesClick,
                 onSaveListClick = onSaveListClick,
+                selectedMovies = selectedMovies,
             )
         }
     }
 }
 
 @Composable
-fun MovieListItem(
+fun MyNewListItem(
     emoji: String,
     title: String,
     onAddMoviesClick: () -> Unit,
     onSaveListClick: () -> Unit,
+    selectedMovies: List<Movie>,
 ) {
+    val remainingMovies = 5 - selectedMovies.size
+
     Card(
         shape = RoundedCornerShape(16.dp),
         backgroundColor = colorResource(id = R.color.teal_700),
@@ -144,21 +153,41 @@ fun MovieListItem(
                 maxLines = 2,
                 modifier =
                     Modifier
-                        .border(2.dp, Color.White, RoundedCornerShape(8.dp))
-                        .padding(horizontal = 15.dp, vertical = 10.dp)
-                        .align(Alignment.CenterHorizontally),
+                        .border(1.dp, Color.White, RoundedCornerShape(8.dp))
+                    .padding(horizontal = 15.dp, vertical = 10.dp)
+                    .align(Alignment.CenterHorizontally),
             )
 
-            Text(
-                text = "Add upto 5 movies to this list...",
-                color = Color.White,
-                fontSize = 14.sp,
-                maxLines = 2,
-                modifier =
-                    Modifier
-                        .padding(top = 18.dp)
-                        .align(Alignment.CenterHorizontally),
-            )
+            if (selectedMovies.isNotEmpty()) {
+                LazyColumn {
+                    item { Spacer(modifier = Modifier.height(12.dp)) }
+                    items(selectedMovies) { movie ->
+                        MovieListItem(movie = movie, onClick = {})
+                    }
+                }
+
+                Text(
+                    text = "Add $remainingMovies more ${if (remainingMovies == 1) "movie" else "movies"} to this list...",
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    maxLines = 2,
+                    modifier =
+                        Modifier
+                            .padding(top = 12.dp)
+                            .align(Alignment.CenterHorizontally),
+                )
+            } else {
+                Text(
+                    text = "Add 5 movies to this list...",
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    maxLines = 2,
+                    modifier =
+                        Modifier
+                            .padding(top = 18.dp)
+                            .align(Alignment.CenterHorizontally),
+                )
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -173,7 +202,7 @@ fun MovieListItem(
                         ),
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_add), // Ensure you have a plus icon drawable
+                        painter = painterResource(id = R.drawable.ic_add),
                         contentDescription = "Add Movies",
                         tint = colorResource(id = R.color.teal_700),
                         modifier = Modifier.size(20.dp),
@@ -192,6 +221,7 @@ fun MovieListItem(
                             contentColor = colorResource(id = R.color.teal_700),
                         ),
                     modifier = Modifier.padding(start = 12.dp),
+                    enabled = selectedMovies.size == 5
                 ) {
                     Text(text = "Save List")
                 }
@@ -210,12 +240,48 @@ private fun CreateListScreenPreview() {
 
 @Preview
 @Composable
-private fun MovieListItemPreview() {
+private fun MyNewListItemEmptyPreview() {
     EmergeTestApplicationTheme {
-        MovieListItem(
+        MyNewListItem(
             emoji = "",
             title = "My Favourite western movies",
             onAddMoviesClick = {},
-            onSaveListClick = {})
+            onSaveListClick = {},
+            selectedMovies = emptyList(),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun MyNewListItemWithMovieInfoPreview() {
+    val dummyMovies =
+        listOf(
+            Movie(
+                id = 1,
+                title = "The Good, the Bad and the Ugly",
+                overview = "Test description 1",
+                poster_path = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
+                release_date = "",
+                vote_average = 0.0,
+            ),
+            Movie(
+                id = 2,
+                title = "Once Upon a Time in the West",
+                overview = "Test Description 2",
+                poster_path = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
+                release_date = "",
+                vote_average = 0.0,
+            ),
+        )
+
+    EmergeTestApplicationTheme {
+        MyNewListItem(
+            emoji = "",
+            title = "My Favourite western movies",
+            onAddMoviesClick = {},
+            onSaveListClick = {},
+            selectedMovies = dummyMovies,
+        )
     }
 }

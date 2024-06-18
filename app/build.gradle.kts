@@ -105,6 +105,7 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     // Firebase
+    implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-analytics")
 

@@ -57,4 +57,9 @@ class MoviesViewModel
             }
         }
     }
+
+    fun clearMoviesSearch() {
+        _moviesState.value = MoviesState()
+    }
+
     }
