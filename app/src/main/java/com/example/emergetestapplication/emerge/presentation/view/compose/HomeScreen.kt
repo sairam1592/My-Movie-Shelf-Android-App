@@ -72,7 +72,7 @@ fun HomeScreen(
                             backgroundColor = colorResource(id = R.color.teal_700),
                             contentColor = Color.White,
                         ),
-                    onClick = {},
+                    onClick = { onCreateListClick() },
                 ) {
                     Text(text = "Create Your List")
                 }
@@ -88,7 +88,7 @@ fun HomeScreen(
                             backgroundColor = colorResource(id = R.color.teal_700),
                             contentColor = Color.White,
                         ),
-                    onClick = {},
+                    onClick = { onSearchUsersClick() },
                 ) {
                     Text(text = "Search Users")
                 }
@@ -98,7 +98,7 @@ fun HomeScreen(
         Button(
             modifier =
                 Modifier
-                .padding(20.dp)
+                    .padding(20.dp)
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
             shape = RoundedCornerShape(16.dp),

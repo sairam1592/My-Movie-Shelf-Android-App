@@ -36,7 +36,7 @@ fun StartUpScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Welcome to Movie App",
+            text = "Welcome to Movies App",
             color = Color.Black,
             fontSize = 20.sp,
             maxLines = 1

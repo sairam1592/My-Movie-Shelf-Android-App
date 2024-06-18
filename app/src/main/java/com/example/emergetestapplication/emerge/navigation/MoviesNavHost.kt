@@ -6,6 +6,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.emergetestapplication.emerge.presentation.view.compose.CreateListScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.HomeScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.LoginScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.SignUpScreen
@@ -20,6 +21,8 @@ sealed class Screen(
     object Login : Screen("login")
     object Signup : Screen("signup")
     object Home : Screen("home")
+
+    object CreateList : Screen("create_list")
 }
 
 @Composable
@@ -73,8 +76,14 @@ fun MoviesNavHost(
                         popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 },
-                onCreateListClick = { },
+                onCreateListClick = { navController.navigate(Screen.CreateList.route) },
                 onSearchUsersClick = { },
+            )
+        }
+
+        composable(Screen.CreateList.route) {
+            CreateListScreen(
+                onAddMoviesClick = { },
             )
         }
     }
