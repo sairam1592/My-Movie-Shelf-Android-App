@@ -3,6 +3,7 @@ package com.example.emergetestapplication.emerge.di
 import android.content.Context
 import androidx.room.Room
 import com.example.emergetestapplication.emerge.AppDatabase
+import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.datasource.local.AuthLocalDataSource
 import com.example.emergetestapplication.emerge.data.datasource.local.AuthLocalDataSourceImpl
 import com.example.emergetestapplication.emerge.data.datasource.remote.MoviesRemoteDataSource
@@ -40,7 +41,7 @@ object AppModule {
             .databaseBuilder(
                 appContext,
                 AppDatabase::class.java,
-                "app_database",
+                AppConstants.DATABASE_NAME,
             ).build()
 
     @Provides

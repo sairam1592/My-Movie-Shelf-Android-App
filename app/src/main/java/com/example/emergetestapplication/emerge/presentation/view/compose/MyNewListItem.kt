@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,7 +56,7 @@ fun MyNewListItem(
             modifier = Modifier.padding(16.dp),
         ) {
             Text(
-                text = "$emoji $title",
+                text = "$emoji  $title",
                 color = Color.White,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium,
@@ -98,7 +99,7 @@ fun MyNewListItem(
 
             } else {
                 Text(
-                    text = "Add 5 movies to this list...",
+                    text = stringResource(id = R.string.add_5_movies_subtitle),
                     color = Color.White,
                     fontSize = 14.sp,
                     maxLines = 2,
@@ -129,7 +130,7 @@ fun MyNewListItem(
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Add Movies")
+                    Text(stringResource(id = R.string.btn_add_movies))
                 }
 
                 Button(
@@ -143,7 +144,7 @@ fun MyNewListItem(
                     modifier = Modifier.padding(start = 12.dp),
                     enabled = selectedMovies.size == 5
                 ) {
-                    Text(text = "Save List")
+                    Text(text = stringResource(id = R.string.btn_save_list))
                 }
             }
         }

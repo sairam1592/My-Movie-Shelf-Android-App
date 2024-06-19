@@ -25,11 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.emergetestapplication.R
+import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.presentation.view.state.AuthState
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
@@ -46,15 +48,15 @@ fun LoginScreen(
 
     Column(
         modifier =
-            Modifier
-                .background(color = colorResource(id = R.color.white))
-                .fillMaxSize()
-                .padding(16.dp),
+        Modifier
+            .background(color = colorResource(id = R.color.white))
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Please Login to Access Movies",
+            text = stringResource(id = R.string.login_screen_title),
             color = Color.Black,
             fontSize = 20.sp,
             maxLines = 1,
@@ -64,7 +66,7 @@ fun LoginScreen(
             modifier = Modifier.padding(top = 30.dp),
             value = username,
             onValueChange = { username = it },
-            label = { Text("Username") },
+            label = { Text(stringResource(id = R.string.hint_username)) },
             shape = RoundedCornerShape(4.dp),
             colors =
                 TextFieldDefaults.textFieldColors(
@@ -79,7 +81,7 @@ fun LoginScreen(
             modifier = Modifier.padding(top = 25.dp),
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text(stringResource(id = R.string.hint_password)) },
             visualTransformation = PasswordVisualTransformation(),
             shape = RoundedCornerShape(4.dp),
             colors =
@@ -94,9 +96,9 @@ fun LoginScreen(
         Button(
             onClick = { onLogin(username, password) },
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
@@ -105,13 +107,13 @@ fun LoginScreen(
                 ),
             enabled = username.isNotBlank() && password.isNotBlank(),
         ) {
-            Text("Login")
+            Text(stringResource(id = R.string.login))
         }
         if (authState.isLoading) {
             CircularProgressIndicator(color = colorResource(id = R.color.teal_700))
         }
         if (authState.isAuthenticated) {
-            Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, AppConstants.TOAST_LOGIN_SUCCESS, Toast.LENGTH_SHORT).show()
             onLoginSuccess()
         }
     }
@@ -125,7 +127,7 @@ fun LoginScreen(
 
 @Preview
 @Composable
-private fun SignUpScreenPreview() {
+private fun LoginScreenPreview() {
     EmergeTestApplicationTheme {
         LoginScreen(authState = AuthState(), onLogin = { _, _ -> }, onLoginSuccess = {}, errorEvent = 0)
     }

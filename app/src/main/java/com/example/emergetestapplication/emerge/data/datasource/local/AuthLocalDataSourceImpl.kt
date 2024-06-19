@@ -1,5 +1,6 @@
 package com.example.emergetestapplication.emerge.data.datasource.local
 
+import com.example.emergetestapplication.emerge.common.AppConstants.ERROR_NO_ACCOUNT_FOUND
 import com.example.emergetestapplication.emerge.data.model.db.UserDao
 import com.example.emergetestapplication.emerge.data.model.user.User
 import com.example.emergetestapplication.emerge.domain.mapper.UserEntityToModelMapper.toEntity
@@ -33,7 +34,7 @@ class AuthLocalDataSourceImpl
                 if (userEntity != null) {
                     Result.success(userEntity.toModel())
                 } else {
-                    Result.failure(Exception("No account found with these credentials"))
+                    Result.failure(Exception(ERROR_NO_ACCOUNT_FOUND))
                 }
             }
 

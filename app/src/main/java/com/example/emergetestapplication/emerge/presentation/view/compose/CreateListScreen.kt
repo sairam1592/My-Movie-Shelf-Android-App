@@ -27,11 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.emergetestapplication.R
+import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.model.movies.Movie
 import com.example.emergetestapplication.emerge.navigation.Screen
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
@@ -55,13 +57,17 @@ fun CreateListScreen(
 
     Column(
         modifier =
-            Modifier
-                .background(color = colorResource(id = R.color.white))
-                .padding(16.dp),
+        Modifier
+            .background(color = colorResource(id = R.color.white))
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
     ) {
-        Text(text = "Create A List", style = MaterialTheme.typography.h6, fontSize = 24.sp)
+        Text(
+            text = stringResource(id = R.string.create_a_list),
+            style = MaterialTheme.typography.h6,
+            fontSize = 24.sp,
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -69,7 +75,7 @@ fun CreateListScreen(
             OutlinedTextField(
                 value = title,
                 onValueChange = { setTitle(it) },
-                label = { Text("Title of the list") },
+                label = { Text(stringResource(id = R.string.hint_list_title)) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 colors =
@@ -86,7 +92,7 @@ fun CreateListScreen(
             OutlinedTextField(
                 value = emoji,
                 onValueChange = { setEmoji(it) },
-                label = { Text("Choose an Emoji") },
+                label = { Text(stringResource(id = R.string.hint_list_emoji)) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 colors =
@@ -111,7 +117,7 @@ fun CreateListScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = emoji.isNotEmpty() && title.isNotEmpty(),
             ) {
-                Text(text = "Create List")
+                Text(text = stringResource(id = R.string.create_list))
             }
         } else {
             MyNewListItem(
@@ -129,7 +135,7 @@ fun CreateListScreen(
     LaunchedEffect(addCategoryState) {
         addCategoryState?.let {
             if (it.isSuccess) {
-                Toast.makeText(context, "List saved successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, AppConstants.TOAST_LIST_SAVED, Toast.LENGTH_SHORT).show()
                 navController.popBackStack(Screen.Home.route, false)
                 setTitle("")
                 setEmoji("")
@@ -137,7 +143,7 @@ fun CreateListScreen(
                 resetAddCategoryState()
             } else if (it.isFailure) {
                 resetAddCategoryState()
-                Toast.makeText(context, "Failed to save the list, Try Again Later!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, AppConstants.TOAST_LIST_SAVE_ERROR, Toast.LENGTH_SHORT).show()
             }
         }
     }

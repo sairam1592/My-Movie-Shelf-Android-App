@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,10 +57,10 @@ fun SearchMoviesScreen(
 
     Column(
         modifier =
-            Modifier
-                .background(color = colorResource(id = R.color.white))
-                .fillMaxSize()
-                .padding(16.dp),
+        Modifier
+            .background(color = colorResource(id = R.color.white))
+            .fillMaxSize()
+            .padding(16.dp),
     ) {
         OutlinedTextField(
             colors =
@@ -85,7 +86,7 @@ fun SearchMoviesScreen(
                         }
                     }
             },
-            label = { Text("Search A Movie to Add to Your List") },
+            label = { Text(stringResource(id = R.string.hint_search_movies)) },
             modifier = Modifier.fillMaxWidth(),
         )
 

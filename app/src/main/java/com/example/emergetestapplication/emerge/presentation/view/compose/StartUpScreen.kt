@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,7 +37,7 @@ fun StartUpScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Hi, Welcome to Your Movies App",
+            text = stringResource(id = R.string.startup_screen_title),
             color = Color.Black,
             fontSize = 18.sp,
             maxLines = 1
@@ -68,7 +69,7 @@ fun StartUpScreen(
                     contentColor = Color.White,
                 ),
         ) {
-            Text("LOGIN")
+            Text(stringResource(id = R.string.login_caps))
         }
         Button(
             onClick = onNavigateToSignUp,
@@ -81,9 +82,9 @@ fun StartUpScreen(
                 ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(id = R.color.teal_700),
                     contentColor = Color.White,
-            )
+            ),
         ) {
-            Text("SIGNUP")
+            Text(stringResource(id = R.string.signup_caps))
         }
     }
 }

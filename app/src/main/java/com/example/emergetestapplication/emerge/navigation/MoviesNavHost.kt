@@ -9,6 +9,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.data.model.movies.Movie
 import com.example.emergetestapplication.emerge.domain.mapper.MovieMapper.toFbMovieModelModel
@@ -173,7 +174,7 @@ fun MoviesNavHost(
                     if (query != authState.user?.username) {
                         moviesViewModel.searchCategoriesByUser(query)
                     } else {
-                        moviesViewModel.setErrorMessageForSearchScreen("Search for other users apart from your username")
+                        moviesViewModel.setErrorMessageForSearchScreen(AppConstants.USER_SEARCH_WARNING)
                     }
                 },
                 clearUserSearch = { moviesViewModel.clearUserSearch() },

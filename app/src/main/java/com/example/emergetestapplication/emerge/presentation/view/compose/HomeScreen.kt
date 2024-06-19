@@ -9,14 +9,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -34,10 +30,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.emergetestapplication.R
+import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
 import com.example.emergetestapplication.emerge.presentation.view.state.AuthState
@@ -67,12 +65,12 @@ fun HomeScreen(
     LaunchedEffect(deleteCategoryState) {
         deleteCategoryState?.let {
             if (it.isSuccess) {
-                Toast.makeText(context, "Category deleted successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, AppConstants.TOAST_CATEGORY_DELETED, Toast.LENGTH_SHORT).show()
                 resetDeleteCategoryState()
                 getUserCategories()
             } else if (it.isFailure) {
                 Toast
-                    .makeText(context, "Failed to Delete, Try Again Later!", Toast.LENGTH_SHORT)
+                    .makeText(context, AppConstants.TOAST_CATEGORY_DELETE_FAILED, Toast.LENGTH_SHORT)
                     .show()
                 resetDeleteCategoryState()
             }
@@ -93,13 +91,13 @@ fun HomeScreen(
                 actions = {
                     IconButton(onClick = {
                         onLogout()
-                        Toast.makeText(context, "Logout Successful", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, AppConstants.TOAST_LOGOUT_SUCCESS, Toast.LENGTH_SHORT).show()
                     }) {
                         Text(
                             style = MaterialTheme.typography.h6,
                             modifier = Modifier.padding(end = 16.dp),
                             text =
-                                "Logout",
+                                stringResource(id = R.string.logout),
                             color = Color.White,
                         )
                     }
@@ -134,13 +132,13 @@ fun HomeScreen(
                         )
 
                         Text(
-                            text = "Your Favourite Lists:",
+                            text = stringResource(id = R.string.your_favourite_lists_title),
                             style = MaterialTheme.typography.h6,
                             modifier = Modifier.padding(top = 10.dp),
                         )
 
                         Text(
-                            text = "(Long Press a Category card to delete it)",
+                            text = stringResource(id = R.string.list_subtitle),
                             fontSize = 12.sp,
                             modifier = Modifier.padding(top = 4.dp),
                         )
@@ -178,7 +176,7 @@ fun HomeScreen(
                         Text(
                             style = MaterialTheme.typography.h6,
                             modifier = Modifier.padding(top = 18.dp),
-                            text = "Start creating your list now!",
+                            text = stringResource(id = R.string.start_creating_list),
                         )
                     }
                 }
@@ -204,7 +202,7 @@ private fun HomeButtonSection(
             border = BorderStroke(2.dp, color = colorResource(id = R.color.teal_700)),
             onClick = { onCreateListClick() },
         ) {
-            Text(text = "Create Your List", color = Color.Black)
+            Text(text = stringResource(id = R.string.btn_create_your_list), color = Color.Black)
         }
 
         Button(
@@ -221,7 +219,7 @@ private fun HomeButtonSection(
             border = BorderStroke(2.dp, color = colorResource(id = R.color.teal_700)),
             onClick = { onSearchUsersClick() },
         ) {
-            Text(text = "Search Users", color = Color.Black)
+            Text(text = stringResource(id = R.string.btn_search_users), color = Color.Black)
         }
     }
 }

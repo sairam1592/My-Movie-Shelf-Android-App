@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,8 +48,8 @@ fun CategoryItem(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(text = "Delete Category") },
-            text = { Text("Are you sure you want to delete this category?") },
+            title = { Text(text = stringResource(id = R.string.delete_category)) },
+            text = { Text(stringResource(id = R.string.delete_category_message)) },
             confirmButton = {
                 TextButton(
                     colors =
@@ -61,7 +62,7 @@ fun CategoryItem(
                         showDialog = false
                     },
                 ) {
-                    Text("Delete")
+                    Text(stringResource(id = R.string.delete))
                 }
             },
             dismissButton = {
@@ -73,7 +74,7 @@ fun CategoryItem(
                     ),
                     onClick = { showDialog = false },
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(id = R.string.cancel))
                 }
             },
         )
@@ -89,8 +90,8 @@ fun CategoryItem(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onLongPress = {
-                            if (isDeleteCategoryEnabled) {
-                                showDialog = true
+                        if (isDeleteCategoryEnabled) {
+                            showDialog = true
                         }
                     },
                 )

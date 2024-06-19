@@ -28,11 +28,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.emergetestapplication.R
+import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
 import com.example.emergetestapplication.emerge.presentation.view.state.SearchUserScreenState
@@ -61,10 +63,10 @@ fun SearchUsersScreen(
 
     Column(
         modifier =
-            Modifier
-                .background(color = colorResource(id = R.color.white))
-                .fillMaxSize()
-                .padding(16.dp),
+        Modifier
+            .background(color = colorResource(id = R.color.white))
+            .fillMaxSize()
+            .padding(16.dp),
     ) {
         OutlinedTextField(
             value = query,
@@ -79,7 +81,7 @@ fun SearchUsersScreen(
                         }
                     }
             },
-            label = { Text("Search by Username") },
+            label = { Text(stringResource(id = R.string.hint_search_by_username)) },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors =
@@ -100,16 +102,16 @@ fun SearchUsersScreen(
             searchUserScreenState.isLoading -> {
                 CircularProgressIndicator(
                     modifier =
-                        Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .size(24.dp)
-                            .align(Alignment.CenterHorizontally),
+                    Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .size(24.dp)
+                        .align(Alignment.CenterHorizontally),
                     color = colorResource(id = R.color.teal_700),
                 )
             }
 
             searchUserScreenState.errorMessage != null -> {
-                Toast.makeText(context, "No Result Found", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, AppConstants.TOAST_NO_RESULT_FOUND, Toast.LENGTH_SHORT).show()
 
                 Column(
                     modifier =
@@ -161,7 +163,7 @@ fun SearchUsersScreen(
                                     .align(Alignment.CenterHorizontally)
                                     .padding(top = 50.dp),
                             fontSize = 16.sp,
-                            text = "Try Searching entire Username to view their Favourite Lists!",
+                            text = stringResource(id = R.string.username_search_hint),
                         )
 
                         Image(
@@ -230,23 +232,6 @@ private fun SearchUsersScreenPreview() {
                                     ),
                             ),
                         ),
-                ),
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun SearchUsersScreenEmptyPreview() {
-    EmergeTestApplicationTheme {
-        SearchUsersScreen(
-            searchUserCategories = {},
-            clearUserSearch = {},
-            searchUserScreenState =
-                SearchUserScreenState(
-                    isLoading = false,
-                    errorMessage = "No Result Found",
-                    userCategories = null,
                 ),
         )
     }

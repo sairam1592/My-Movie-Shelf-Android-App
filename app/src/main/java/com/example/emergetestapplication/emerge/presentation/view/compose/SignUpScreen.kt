@@ -24,11 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.emergetestapplication.R
+import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.presentation.view.state.AuthState
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
@@ -44,15 +46,15 @@ fun SignUpScreen(
 
     Column(
         modifier =
-            Modifier
-                .background(color = colorResource(id = R.color.white))
-                .fillMaxSize()
-                .padding(16.dp),
+        Modifier
+            .background(color = colorResource(id = R.color.white))
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Please Sign Up to Access Movies",
+            text = stringResource(id = R.string.signup_title),
             color = Color.Black,
             fontSize = 20.sp,
             maxLines = 1,
@@ -62,7 +64,7 @@ fun SignUpScreen(
             modifier = Modifier.padding(top = 30.dp),
             value = username,
             onValueChange = { username = it },
-            label = { Text("Username") },
+            label = { Text(stringResource(id = R.string.hint_username)) },
             shape = RoundedCornerShape(4.dp),
             colors =
                 TextFieldDefaults.textFieldColors(
@@ -78,7 +80,7 @@ fun SignUpScreen(
             shape = RoundedCornerShape(4.dp),
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text(stringResource(id = R.string.hint_password)) },
             visualTransformation = PasswordVisualTransformation(),
             colors =
                 TextFieldDefaults.textFieldColors(
@@ -92,9 +94,9 @@ fun SignUpScreen(
         Button(
             onClick = { onSignUp(username, password) },
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
@@ -103,13 +105,13 @@ fun SignUpScreen(
                 ),
             enabled = username.isNotBlank() && password.isNotBlank(),
         ) {
-            Text("Sign Up")
+            Text(stringResource(id = R.string.btn_signup))
         }
         if (authState.isLoading) {
             CircularProgressIndicator(color = colorResource(id = R.color.teal_700))
         }
         if (authState.isAuthenticated) {
-            Toast.makeText(context, "Sign Up Successful", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, AppConstants.TOAST_SIGNUP_SUCCESS, Toast.LENGTH_SHORT).show()
             onSignUpSuccess()
         }
     }

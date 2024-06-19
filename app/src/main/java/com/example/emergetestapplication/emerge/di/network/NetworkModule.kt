@@ -1,5 +1,6 @@
 package com.example.emergetestapplication.emerge.di.network
 
+import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.network.APIService
 import dagger.Module
 import dagger.Provides
@@ -41,7 +42,7 @@ object NetworkModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
         Retrofit
             .Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl(AppConstants.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

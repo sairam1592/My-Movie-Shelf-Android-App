@@ -1,5 +1,13 @@
 package com.example.emergetestapplication.emerge.data.datasource.remote
 
+import com.example.emergetestapplication.emerge.common.AppConstants
+import com.example.emergetestapplication.emerge.common.AppConstants.CATEGORY_EMOJI
+import com.example.emergetestapplication.emerge.common.AppConstants.CATEGORY_MOVIES
+import com.example.emergetestapplication.emerge.common.AppConstants.CATEGORY_TITLE
+import com.example.emergetestapplication.emerge.common.AppConstants.MOVIE_ID
+import com.example.emergetestapplication.emerge.common.AppConstants.MOVIE_OVERVIEW
+import com.example.emergetestapplication.emerge.common.AppConstants.MOVIE_POSTER_PATH
+import com.example.emergetestapplication.emerge.common.AppConstants.MOVIE_TITLE
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
 import com.example.emergetestapplication.emerge.data.model.movies.MovieResponse
@@ -22,22 +30,21 @@ class MoviesRemoteDataSourceImpl
         private val apiService: APIService,
         private val fireStore: FirebaseFirestore,
     ) : MoviesRemoteDataSource {
-
-    /**
-     * This method is used to search the movies based on the Movie Title.
-     */
-    override fun searchMovies(query: String): Flow<Result<MovieResponse>> =
+        /**
+         * This method is used to search the movies based on the Movie Title.
+         */
+        override fun searchMovies(query: String): Flow<Result<MovieResponse>> =
             flow {
                 emit(Result.success(apiService.searchMovies(query)))
             }.flowOn(Dispatchers.IO)
 
-    /**
-     * This method is used to get the user categories from the Firebase Firestore Database Collection.
-     */
+        /**
+         * This method is used to get the user categories from the Firebase Firestore Database Collection.
+         */
         override suspend fun getUserCategories(username: String): List<FbCategoryModel>? =
             suspendCoroutine { continuation ->
                 fireStore
-                    .collection("users")
+                    .collection(AppConstants.FIREBASE_COLLECTION_NAME)
                     .document(username)
                     .get()
                     .addOnSuccessListener { document ->
@@ -45,16 +52,16 @@ class MoviesRemoteDataSourceImpl
                             document.data?.mapNotNull { entry ->
                                 val categoryData =
                                     entry.value as? Map<*, *> ?: return@mapNotNull null
-                                val title = categoryData["title"] as? String ?: ""
-                                val emoji = categoryData["emoji"] as? String ?: ""
-                                val moviesList = categoryData["movies"] as? List<Map<*, *>>
+                                val title = categoryData[CATEGORY_TITLE] as? String ?: ""
+                                val emoji = categoryData[CATEGORY_EMOJI] as? String ?: ""
+                                val moviesList = categoryData[CATEGORY_MOVIES] as? List<Map<*, *>>
                                 val movies =
                                     moviesList?.map { movieData ->
                                         FbMovieModel(
-                                            id = (movieData["id"] as? Long)?.toInt() ?: 0,
-                                            title = movieData["title"] as? String ?: "",
-                                            overview = movieData["overview"] as? String ?: "",
-                                            posterPath = movieData["posterPath"] as? String ?: "",
+                                            id = (movieData[MOVIE_ID] as? Long)?.toInt() ?: 0,
+                                            title = movieData[MOVIE_TITLE] as? String ?: "",
+                                            overview = movieData[MOVIE_OVERVIEW] as? String ?: "",
+                                            posterPath = movieData[MOVIE_POSTER_PATH] as? String ?: "",
                                         )
                                     } ?: emptyList()
                                 FbCategoryModel(title = title, emoji = emoji, movies = movies)
@@ -66,9 +73,9 @@ class MoviesRemoteDataSourceImpl
                     }
             }
 
-    /**
-     * This method is used to add the a new Category with 5 movies to the Firebase Firestore Database Collection.
-     */
+        /**
+         * This method is used to add the a new Category with 5 movies to the Firebase Firestore Database Collection.
+         */
         override suspend fun addCategoryToFirebaseDB(
             username: String,
             categoryName: String,
@@ -78,21 +85,21 @@ class MoviesRemoteDataSourceImpl
                 mapOf(
                     categoryName to
                         mapOf(
-                            "title" to categoryName,
-                            "emoji" to category.emoji,
-                            "movies" to
+                            CATEGORY_TITLE to categoryName,
+                            CATEGORY_EMOJI to category.emoji,
+                            CATEGORY_MOVIES to
                                 category.movies.map {
                                     mapOf(
-                                        "id" to it.id,
-                                        "title" to it.title,
-                                        "overview" to it.overview,
-                                        "posterPath" to it.posterPath,
+                                        MOVIE_ID to it.id,
+                                        MOVIE_TITLE to it.title,
+                                        MOVIE_OVERVIEW to it.overview,
+                                        MOVIE_POSTER_PATH to it.posterPath,
                                     )
                                 },
                         ),
                 )
             fireStore
-                .collection("users")
+                .collection(AppConstants.FIREBASE_COLLECTION_NAME)
                 .document(username)
                 .set(categoryMap, SetOptions.merge())
                 .addOnSuccessListener {
@@ -102,21 +109,21 @@ class MoviesRemoteDataSourceImpl
                 }
         }
 
-    /**
-     * This method is used to delete the category from the Firebase Firestore.
-     */
+        /**
+         * This method is used to delete the category from the Firebase Firestore.
+         */
         override suspend fun deleteCategory(
             username: String,
             categoryName: String,
         ) = suspendCoroutine { continuation ->
             fireStore
-                .collection("users")
+                .collection(AppConstants.FIREBASE_COLLECTION_NAME)
                 .document(username)
                 .update(categoryName, FieldValue.delete())
                 .addOnSuccessListener {
                     continuation.resume(Unit)
                 }.addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
-            }
-    }
+                }
+        }
     }
