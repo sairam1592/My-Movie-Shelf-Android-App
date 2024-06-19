@@ -54,6 +54,7 @@ fun MoviesNavHost(
     val searchUserScreenState by moviesViewModel.searchUserScreenState.collectAsStateWithLifecycle()
     val addCategoryState by moviesViewModel.addCategoryState.collectAsStateWithLifecycle()
     val deleteCategoryState by moviesViewModel.deleteCategoryState.collectAsStateWithLifecycle()
+    val modifyCategoryState by moviesViewModel.modifyCategoryState.collectAsStateWithLifecycle()
 
     var selectedMovies by remember { mutableStateOf<List<Movie>>(emptyList()) }
 
@@ -131,6 +132,15 @@ fun MoviesNavHost(
                 },
                 deleteCategoryState = deleteCategoryState,
                 resetDeleteCategoryState = { moviesViewModel.resetDeleteCategoryState() },
+                onModifyCategory = { category, movieIds ->
+                    moviesViewModel.removeMoviesFromCategory(
+                        authState.user?.username ?: "",
+                        category.title,
+                        movieIds,
+                    )
+                },
+                modifyCategoryState = modifyCategoryState,
+                resetModifyCategoryState = { moviesViewModel.resetModifyCategoryState() },
             )
         }
 

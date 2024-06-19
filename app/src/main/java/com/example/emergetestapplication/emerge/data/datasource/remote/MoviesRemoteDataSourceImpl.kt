@@ -4,6 +4,7 @@ import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.common.AppConstants.CATEGORY_EMOJI
 import com.example.emergetestapplication.emerge.common.AppConstants.CATEGORY_MOVIES
 import com.example.emergetestapplication.emerge.common.AppConstants.CATEGORY_TITLE
+import com.example.emergetestapplication.emerge.common.AppConstants.FIREBASE_COLLECTION_NAME
 import com.example.emergetestapplication.emerge.common.AppConstants.MOVIE_ID
 import com.example.emergetestapplication.emerge.common.AppConstants.MOVIE_OVERVIEW
 import com.example.emergetestapplication.emerge.common.AppConstants.MOVIE_POSTER_PATH
@@ -123,6 +124,41 @@ class MoviesRemoteDataSourceImpl
                 .addOnSuccessListener {
                     continuation.resume(Unit)
                 }.addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }
+        }
+
+        override suspend fun removeMoviesFromCategory(
+            username: String,
+            categoryName: String,
+            movieIds: List<Int>,
+        ): Unit =
+            suspendCoroutine { continuation ->
+                fireStore
+                    .collection(FIREBASE_COLLECTION_NAME)
+                    .document(username)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        val categoryData = document.get(categoryName) as? Map<*, *>
+                        val moviesList = categoryData?.get(CATEGORY_MOVIES) as? List<Map<*, *>>
+                        val updatedMoviesList =
+                            moviesList?.filterNot { movieData ->
+                                movieIds.contains((movieData[MOVIE_ID] as? Long)?.toInt())
+                            }
+
+                        val updatedCategory = categoryData?.toMutableMap()
+                        updatedCategory?.set(CATEGORY_MOVIES, updatedMoviesList)
+
+                        fireStore
+                            .collection(FIREBASE_COLLECTION_NAME)
+                            .document(username)
+                            .update(categoryName, updatedCategory)
+                            .addOnSuccessListener {
+                                continuation.resume(Unit)
+                            }.addOnFailureListener { exception ->
+                                continuation.resumeWithException(exception)
+                            }
+                    }.addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
         }

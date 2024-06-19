@@ -54,6 +54,9 @@ fun HomeScreen(
     deleteCategory: (FbCategoryModel) -> Unit,
     deleteCategoryState: Result<Unit>?,
     resetDeleteCategoryState: () -> Unit,
+    onModifyCategory: (FbCategoryModel, List<Int>) -> Unit,
+    modifyCategoryState: Result<Unit>?,
+    resetModifyCategoryState: () -> Unit,
 ) {
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
@@ -73,6 +76,26 @@ fun HomeScreen(
                     .makeText(context, AppConstants.TOAST_CATEGORY_DELETE_FAILED, Toast.LENGTH_SHORT)
                     .show()
                 resetDeleteCategoryState()
+            }
+        }
+    }
+
+    LaunchedEffect(modifyCategoryState) {
+        modifyCategoryState?.let {
+            if (it.isSuccess) {
+                Toast
+                    .makeText(context, AppConstants.TOAST_CATEGORY_MODIFIED, Toast.LENGTH_SHORT)
+                    .show()
+                resetModifyCategoryState()
+                getUserCategories()
+            } else if (it.isFailure) {
+                Toast
+                    .makeText(
+                        context,
+                        AppConstants.TOAST_CATEGORY_MODIFY_FAILED,
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                resetModifyCategoryState()
             }
         }
     }
@@ -109,10 +132,10 @@ fun HomeScreen(
         content = { padding ->
             Box(
                 modifier =
-                Modifier
-                    .background(color = colorResource(id = R.color.white))
-                    .padding(horizontal = 16.dp)
-                    .fillMaxSize(),
+                    Modifier
+                        .background(color = colorResource(id = R.color.white))
+                        .padding(horizontal = 16.dp)
+                        .fillMaxSize(),
             ) {
                 if (!authState.isAuthenticated) {
                     onLogoutSuccess()
@@ -121,9 +144,9 @@ fun HomeScreen(
                 if (!homeScreenState.userCategories.isNullOrEmpty()) {
                     Column(
                         modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .align(Alignment.TopCenter),
+                            Modifier
+                                .fillMaxSize()
+                                .align(Alignment.TopCenter),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         HomeButtonSection(
@@ -147,15 +170,17 @@ fun HomeScreen(
                             categories =
                                 homeScreenState.userCategories,
                             onDeleteCategory = deleteCategory,
-                            isDeleteCategoryEnabled = true
+                            onModifyCategory = onModifyCategory,
+                            isDeleteCategoryEnabled = true,
+                            isShowModifyButton = true,
                         )
                     }
                 } else {
                     Column(
                         modifier =
-                        Modifier
-                            .padding(16.dp)
-                            .align(Alignment.TopCenter),
+                            Modifier
+                                .padding(16.dp)
+                                .align(Alignment.TopCenter),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         HomeButtonSection(
@@ -207,9 +232,9 @@ private fun HomeButtonSection(
 
         Button(
             modifier =
-            Modifier
-                .padding(start = 16.dp)
-                .wrapContentSize(),
+                Modifier
+                    .padding(start = 16.dp)
+                    .wrapContentSize(),
             shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
@@ -282,6 +307,9 @@ private fun HomeScreenPreview() {
             deleteCategory = {},
             deleteCategoryState = null,
             resetDeleteCategoryState = {},
+            onModifyCategory = { _, _ -> },
+            modifyCategoryState = null,
+            resetModifyCategoryState = {},
         )
     }
 }
@@ -301,6 +329,9 @@ private fun HomeScreenEmptyPreview() {
             deleteCategory = {},
             deleteCategoryState = null,
             resetDeleteCategoryState = {},
+            onModifyCategory = { _, _ -> },
+            modifyCategoryState = null,
+            resetModifyCategoryState = {},
         )
     }
 }

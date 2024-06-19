@@ -33,4 +33,12 @@ class MovieRepositoryImpl
         ) {
             moviesRemoteDataSource.deleteCategory(username, categoryName)
         }
+
+        override suspend fun removeMoviesFromCategory(
+            username: String,
+            categoryName: String,
+            movieIds: List<Int>,
+        ) {
+            moviesRemoteDataSource.removeMoviesFromCategory(username, categoryName, movieIds)
     }
+}

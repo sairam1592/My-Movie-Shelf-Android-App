@@ -19,4 +19,10 @@ interface MoviesRemoteDataSource {
         username: String,
         categoryName: String,
     )
+
+    suspend fun removeMoviesFromCategory(
+        username: String,
+        categoryName: String,
+        movieIds: List<Int>,
+    )
 }

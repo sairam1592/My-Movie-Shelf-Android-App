@@ -9,6 +9,7 @@ object AppConstants {
     const val TOAST_NO_RESULT_FOUND = "No Result Found"
     const val ERROR_SIGNUP_FAILED = "Sign up failed"
     const val ACCOUNT_ALREADY_EXISTS = "Account already exists, please login."
+    const val TOAST_CATEGORY_MODIFY_FAILED = "Failed to modify the category list, Try Again Later!"
 
     // Success Strings
     const val TOAST_LIST_SAVED = "List saved successfully!"
@@ -16,6 +17,7 @@ object AppConstants {
     const val TOAST_LOGOUT_SUCCESS = "Logout Successful"
     const val TOAST_LOGIN_SUCCESS = "Login Successful"
     const val TOAST_SIGNUP_SUCCESS = "Sign Up Successful"
+    const val TOAST_CATEGORY_MODIFIED = "Category List Modified Successfully!"
 
     // Firebase Strings
     const val FIREBASE_COLLECTION_NAME = "users"

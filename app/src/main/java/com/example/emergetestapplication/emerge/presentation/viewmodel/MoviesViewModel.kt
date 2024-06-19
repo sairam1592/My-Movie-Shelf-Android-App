@@ -7,6 +7,7 @@ import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryMo
 import com.example.emergetestapplication.emerge.domain.usecase.AddCategoryToFireBaseDBUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.DeleteCategoryUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.GetUserCategoriesUseCase
+import com.example.emergetestapplication.emerge.domain.usecase.RemoveMoviesFromCategoryUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.SearchMoviesUseCase
 import com.example.emergetestapplication.emerge.presentation.view.state.HomeScreenState
 import com.example.emergetestapplication.emerge.presentation.view.state.MoviesState
@@ -26,6 +27,7 @@ class MoviesViewModel
         private val getUserCategoriesUseCase: GetUserCategoriesUseCase,
         private val addCategoryUseCase: AddCategoryToFireBaseDBUseCase,
         private val deleteCategoryUseCase: DeleteCategoryUseCase,
+        private val removeMoviesFromCategoryUseCase: RemoveMoviesFromCategoryUseCase,
         private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private val _moviesState = MutableStateFlow(MoviesState())
@@ -43,6 +45,9 @@ class MoviesViewModel
         private val _deleteCategoryState = MutableStateFlow<Result<Unit>?>(null)
         val deleteCategoryState = _deleteCategoryState.asStateFlow()
 
+        private val _modifyCategoryState = MutableStateFlow<Result<Unit>?>(null)
+        val modifyCategoryState = _modifyCategoryState.asStateFlow()
+
         companion object {
             private const val KEY_TITLE = "title"
             private const val KEY_EMOJI = "emoji"
@@ -59,13 +64,6 @@ class MoviesViewModel
         fun setEmoji(value: String) {
             emoji.value = value
             savedStateHandle[KEY_EMOJI] = value
-        }
-
-        fun resetTitleAndEmoji() {
-            title.value = ""
-            emoji.value = ""
-            savedStateHandle[KEY_TITLE] = ""
-            savedStateHandle[KEY_EMOJI] = ""
         }
 
         fun getUserCategories(username: String) {
@@ -135,6 +133,26 @@ class MoviesViewModel
         fun resetDeleteCategoryState() {
             _deleteCategoryState.value = null
         }
+
+        fun removeMoviesFromCategory(
+            username: String,
+            categoryName: String,
+            movieIds: List<Int>,
+        ) {
+            viewModelScope.launch {
+                runCatching {
+                    removeMoviesFromCategoryUseCase(username, categoryName, movieIds)
+                }.onSuccess {
+                    _modifyCategoryState.value = Result.success(Unit)
+                }.onFailure { exception ->
+                    _modifyCategoryState.value = Result.failure(exception)
+                }
+            }
+        }
+
+        fun resetModifyCategoryState() {
+        _deleteCategoryState.value = null
+    }
 
         fun searchMovies(query: String) {
             viewModelScope.launch {

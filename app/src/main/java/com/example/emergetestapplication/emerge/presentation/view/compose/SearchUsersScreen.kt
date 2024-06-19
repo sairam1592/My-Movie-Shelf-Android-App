@@ -147,6 +147,8 @@ fun SearchUsersScreen(
                         categories = searchUserScreenState.userCategories,
                         onDeleteCategory = { /*Do nothing*/ },
                         isDeleteCategoryEnabled = false,
+                        isShowModifyButton = false,
+                        onModifyCategory = { _, _ -> /*Do nothing*/ },
                     )
                 } else {
                     Column(
