@@ -2,6 +2,12 @@
 - Senior Android Test Project - TOP5 Movies CRUD functionality
 - The project consists of a simple mobile app for movie fans to showcase ordered lists of their favorite movies. Users should be able to create multiple "Top 5" lists that will be displayed on their profile.
 
+# Requirements
+1. Simple sign-up/login/logout auth system (basic username + password will do).
+2. Profile TOP5 lists CRUD functionality.
+3. Ability to view another user's TOP5 Profile by providing their username.
+4. Decisions can be made for caching and persistence needs.
+
 # List Examples
 "All-time Funniest Movies"
 "Movies That Bring You To Tears"
@@ -25,11 +31,37 @@
 6. Hilt: For Dependency Injection.
 7. Kotlin Coroutines & Flow: For asynchronous programming.
 
-# Requirements
-1. Simple sign-up/login/logout auth system (basic username + password will do).
-2. Profile TOP5 lists CRUD functionality.
-3. Ability to view another user's TOP5 Profile by providing their username.
-4. Decisions can be made for caching and persistence needs.
+# ScreenShots
+
+LOGIN FLOW
+
+https://github.com/sairam1592/Emerge-Android-Test/assets/14980927/8231e332-48e8-4572-81b6-6477fa554568
+
+
+CREATE A LIST and SEARCH MOVIES FROM TMDB and ADD them to list
+
+https://github.com/sairam1592/Emerge-Android-Test/assets/14980927/ba1345d8-9423-44e6-8ffa-183684f47552
+
+
+SAVE THE CREATED LIST TO FIREBASE FIRESTORE DB
+
+https://github.com/sairam1592/Emerge-Android-Test/assets/14980927/b0d473c2-3713-4358-9cb7-b23dd6dec2b9
+
+
+SAMPLE ACCOUNT WITH MULTIPLE TOP 5 LISTS
+
+https://github.com/sairam1592/Emerge-Android-Test/assets/14980927/0742a92f-f0f0-4a5d-85e3-570242a6effd
+
+
+SEARCH and RETRIVE OTHER USER ACCOUNTS details from FIREBASE FIRESTORE DB
+
+https://github.com/sairam1592/Emerge-Android-Test/assets/14980927/9a4d51bd-27f2-457c-a216-2960dd611c20
+
+
+DELETE A LIST FROM UI AND FIREBASE DB
+
+https://github.com/sairam1592/Emerge-Android-Test/assets/14980927/f84b7ec1-e91a-4cfb-96d6-b6548742027f
+
 
 # Features and Implementation
 
