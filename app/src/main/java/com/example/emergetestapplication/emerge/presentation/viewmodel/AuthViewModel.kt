@@ -2,7 +2,9 @@ package com.example.emergetestapplication.emerge.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.model.user.User
+import com.example.emergetestapplication.emerge.domain.usecase.CheckUserExistsUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.LoginUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.LogoutUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.SignUpUseCase
@@ -19,6 +21,7 @@ class AuthViewModel
     @Inject
     constructor(
         private val signUpUseCase: SignUpUseCase,
+        private val checkUserExistsUseCase: CheckUserExistsUseCase,
         private val loginUseCase: LoginUseCase,
         private val logoutUseCase: LogoutUseCase,
     ) : ViewModel() {
@@ -31,20 +34,34 @@ class AuthViewModel
         fun signUp(
             username: String,
             password: String,
+            onAccountExists: () -> Unit,
+            onSignUpSuccess: () -> Unit,
         ) {
             viewModelScope.launch {
                 _authState.value = _authState.value.copy(isLoading = true)
-                runCatching {
-                    signUpUseCase(username, password)
-                }.onSuccess {
+
+                val userExists = checkUserExistsUseCase(username)
+                if (userExists) {
                     _authState.value =
-                        _authState.value.copy(isLoading = false, user = User(username, password))
-                }.onFailure { exception ->
-                    _authState.value =
-                        _authState.value.copy(
-                            isLoading = false,
-                            errorMessage = "Sign up failed",
-                        )
+                        _authState.value.copy(isLoading = false, isAccountExists = true)
+                    onAccountExists()
+                } else {
+                    runCatching {
+                        signUpUseCase(username, password)
+                    }.onSuccess {
+                        _authState.value =
+                            _authState.value.copy(
+                                isLoading = false,
+                                user = User(username, password),
+                            )
+                        onSignUpSuccess()
+                    }.onFailure { exception ->
+                        _authState.value =
+                            _authState.value.copy(
+                                isLoading = false,
+                                errorMessage = AppConstants.ERROR_SIGNUP_FAILED,
+                            )
+                    }
                 }
             }
         }

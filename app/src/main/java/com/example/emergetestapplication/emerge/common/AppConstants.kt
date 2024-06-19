@@ -7,8 +7,10 @@ object AppConstants {
     const val TOAST_LIST_SAVE_ERROR = "Failed to save the list, Try Again Later!"
     const val TOAST_CATEGORY_DELETE_FAILED = "Failed to delete the category, Try Again Later!"
     const val TOAST_NO_RESULT_FOUND = "No Result Found"
+    const val ERROR_SIGNUP_FAILED = "Sign up failed"
+    const val ACCOUNT_ALREADY_EXISTS = "Account already exists, please login."
 
-    //Success Strings
+    // Success Strings
     const val TOAST_LIST_SAVED = "List saved successfully!"
     const val TOAST_CATEGORY_DELETED = "Category Deleted Successfully!"
     const val TOAST_LOGOUT_SUCCESS = "Logout Successful"

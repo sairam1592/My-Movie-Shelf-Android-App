@@ -2,7 +2,6 @@ package com.example.emergetestapplication.emerge.data.repository.authentication
 
 import com.example.emergetestapplication.emerge.data.datasource.local.AuthLocalDataSource
 import com.example.emergetestapplication.emerge.data.model.user.User
-import com.example.emergetestapplication.emerge.data.repository.authentication.AuthRepository
 import javax.inject.Inject
 
 class AuthRepositoryImpl
@@ -14,6 +13,8 @@ class AuthRepositoryImpl
             username: String,
             password: String,
         ): Result<Unit> = localDataSource.signUp(username, password)
+
+        override suspend fun checkUserExists(username: String): Boolean = localDataSource.checkUserExists(username)
 
         override suspend fun login(
             username: String,

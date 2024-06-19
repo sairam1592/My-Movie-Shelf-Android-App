@@ -25,6 +25,11 @@ class AuthLocalDataSourceImpl
                 Result.success(Unit)
             }
 
+        override suspend fun checkUserExists(username: String): Boolean =
+            withContext(Dispatchers.IO) {
+                userDao.getUserByUsername(username) != null
+            }
+
         override suspend fun login(
             username: String,
             password: String,

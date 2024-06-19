@@ -68,9 +68,21 @@ fun MoviesNavHost(
         composable(Screen.Signup.route) {
             SignUpScreen(
                 authState = authState,
-                onSignUp = { username, password -> authViewModel.signUp(username, password) },
+                onSignUp = { username, password, onAccountExists, onSignUpSuccess ->
+                    authViewModel.signUp(
+                        username,
+                        password,
+                        onAccountExists,
+                        onSignUpSuccess,
+                    )
+                },
                 onSignUpSuccess = {
                     navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Signup.route) { inclusive = true }
+                    }
+                },
+                onAccountExists = {
+                    navController.navigate(Screen.Login.route) {
                         popUpTo(Screen.Signup.route) { inclusive = true }
                     }
                 },

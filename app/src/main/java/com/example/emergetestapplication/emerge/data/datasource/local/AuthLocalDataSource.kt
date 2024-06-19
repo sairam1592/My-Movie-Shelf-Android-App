@@ -8,6 +8,8 @@ interface AuthLocalDataSource {
         password: String,
     ): Result<Unit>
 
+    suspend fun checkUserExists(username: String): Boolean
+
     suspend fun login(
         username: String,
         password: String,

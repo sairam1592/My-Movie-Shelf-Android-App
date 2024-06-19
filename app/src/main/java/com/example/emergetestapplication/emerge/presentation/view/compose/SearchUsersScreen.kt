@@ -66,7 +66,7 @@ fun SearchUsersScreen(
         Modifier
             .background(color = colorResource(id = R.color.white))
             .fillMaxSize()
-            .padding(16.dp),
+                .padding(horizontal = 16.dp),
     ) {
         OutlinedTextField(
             value = query,
@@ -82,7 +82,7 @@ fun SearchUsersScreen(
                     }
             },
             label = { Text(stringResource(id = R.string.hint_search_by_username)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
             shape = RoundedCornerShape(16.dp),
             colors =
                 TextFieldDefaults.outlinedTextFieldColors(

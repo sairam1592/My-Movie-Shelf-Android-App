@@ -37,8 +37,9 @@ import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 @Composable
 fun SignUpScreen(
     authState: AuthState,
-    onSignUp: (String, String) -> Unit,
+    onSignUp: (String, String, () -> Unit, () -> Unit) -> Unit,
     onSignUpSuccess: () -> Unit,
+    onAccountExists: () -> Unit,
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -92,7 +93,19 @@ fun SignUpScreen(
                 ),
         )
         Button(
-            onClick = { onSignUp(username, password) },
+            onClick = {
+                onSignUp(username, password, {
+                    Toast
+                        .makeText(context, AppConstants.ACCOUNT_ALREADY_EXISTS, Toast.LENGTH_SHORT)
+                        .show()
+                    onAccountExists()
+                }, {
+                    Toast
+                        .makeText(context, AppConstants.TOAST_SIGNUP_SUCCESS, Toast.LENGTH_SHORT)
+                        .show()
+                    onSignUpSuccess()
+                })
+            },
             modifier =
             Modifier
                 .fillMaxWidth()
@@ -121,6 +134,11 @@ fun SignUpScreen(
 @Composable
 private fun SignUpScreenPreview() {
     EmergeTestApplicationTheme {
-        SignUpScreen(authState = AuthState(), onSignUp = { _, _ -> }, onSignUpSuccess = { })
+        SignUpScreen(
+            authState = AuthState(),
+            onSignUp = { _, _, _, _ -> },
+            onSignUpSuccess = { },
+            onAccountExists = { },
+        )
     }
 }
