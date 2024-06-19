@@ -16,7 +16,7 @@
 
 # Features
 1. User Authentication
-2. Simple sign-up/login/logout auth system (basic username + password will do).
+2. Simple sign-up/login/logout auth system (basic username + password with help of Room DB).
 3. Profile TOP5 Lists CRUD Functionality
 4. Create, Read, Update, and Delete operations for movie lists.
 5. View Another User's TOP5 Profile
