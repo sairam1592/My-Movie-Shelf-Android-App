@@ -87,7 +87,6 @@ fun HomeScreen(
                     .makeText(context, AppConstants.TOAST_CATEGORY_MODIFIED, Toast.LENGTH_SHORT)
                     .show()
                 resetModifyCategoryState()
-                getUserCategories()
             } else if (it.isFailure) {
                 Toast
                     .makeText(

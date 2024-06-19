@@ -143,6 +143,7 @@ class MoviesViewModel
                 runCatching {
                     removeMoviesFromCategoryUseCase(username, categoryName, movieIds)
                 }.onSuccess {
+                    getUserCategories(username)
                     _modifyCategoryState.value = Result.success(Unit)
                 }.onFailure { exception ->
                     _modifyCategoryState.value = Result.failure(exception)
@@ -151,8 +152,8 @@ class MoviesViewModel
         }
 
         fun resetModifyCategoryState() {
-        _deleteCategoryState.value = null
-    }
+            _deleteCategoryState.value = null
+        }
 
         fun searchMovies(query: String) {
             viewModelScope.launch {
