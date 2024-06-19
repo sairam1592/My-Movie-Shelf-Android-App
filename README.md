@@ -20,7 +20,7 @@ Senior Android Test Project for Emerge, Auckland
 2. Simple sign-up/login/logout auth system (basic username + password with help of Room DB).
 3. Profile TOP5 Lists CRUD Functionality
 4. Create, Read, Update, and Delete operations for movie lists.
-5. View Another User's TOP5 Profile
+5. View my multiple Top 5 Lists.
 6. Ability to view another user's TOP5 Profile by providing their username.
 
 # Development Technologies
