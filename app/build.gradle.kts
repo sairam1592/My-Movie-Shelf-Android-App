@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -7,6 +10,10 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
 }
+
+val secretPropertiesFile = rootProject.file("secret.properties")
+val gradleProperties = Properties()
+gradleProperties.load(FileInputStream(secretPropertiesFile))
 
 android {
     namespace = "com.example.emergetestapplication"
@@ -23,6 +30,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField(
+            "String",
+            "BEARER_TOKEN",
+            gradleProperties.getProperty("BEARER_TOKEN"),
+        )
     }
 
     buildTypes {
