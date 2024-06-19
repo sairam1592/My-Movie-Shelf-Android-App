@@ -160,6 +160,7 @@ fun MoviesNavHost(
                     }
                 },
                 selectedMovies = selectedMovies,
+                removeMovie = { movie -> selectedMovies = selectedMovies - movie },
                 resetSelectedMovies = { selectedMovies = emptyList() },
                 addCategoryState = addCategoryState,
                 resetAddCategoryState = { moviesViewModel.resetAddCategoryState() },

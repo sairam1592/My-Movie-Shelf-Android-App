@@ -48,6 +48,7 @@ fun CreateListScreen(
     onSaveListClick: (String, String, List<Movie>) -> Unit,
     resetSelectedMovies: () -> Unit,
     selectedMovies: List<Movie> = emptyList(),
+    removeMovie: (Movie) -> Unit,
     addCategoryState: Result<Unit>?,
     resetAddCategoryState: () -> Unit,
     navController: NavHostController,
@@ -57,9 +58,9 @@ fun CreateListScreen(
 
     Column(
         modifier =
-        Modifier
-            .background(color = colorResource(id = R.color.white))
-            .padding(16.dp),
+            Modifier
+                .background(color = colorResource(id = R.color.white))
+                .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
     ) {
@@ -128,6 +129,7 @@ fun CreateListScreen(
                     onSaveListClick(title, emoji, selectedMovies)
                 },
                 selectedMovies = selectedMovies,
+                removeMovie = removeMovie,
             )
         }
     }
@@ -172,6 +174,7 @@ private fun CreateListScreenPreview() {
             addCategoryState = null,
             resetAddCategoryState = {},
             navController = NavHostController(context = LocalContext.current),
+            removeMovie = {},
         )
     }
 }
@@ -186,6 +189,7 @@ private fun MyNewListItemEmptyPreview() {
             onAddMoviesClick = {},
             onSaveListClick = {},
             selectedMovies = emptyList(),
+            removeMovie = {}
         )
     }
 }

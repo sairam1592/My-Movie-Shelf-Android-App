@@ -41,6 +41,7 @@ fun MyNewListItem(
     onAddMoviesClick: () -> Unit,
     onSaveListClick: () -> Unit,
     selectedMovies: List<Movie>,
+    removeMovie: (Movie) -> Unit,
 ) {
     val remainingMovies = 5 - selectedMovies.size
 
@@ -48,9 +49,9 @@ fun MyNewListItem(
         shape = RoundedCornerShape(16.dp),
         backgroundColor = colorResource(id = R.color.teal_700),
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
+            Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -62,10 +63,10 @@ fun MyNewListItem(
                 fontWeight = FontWeight.Medium,
                 maxLines = 2,
                 modifier =
-                Modifier
-                    .border(1.dp, Color.White, RoundedCornerShape(8.dp))
-                    .padding(horizontal = 15.dp, vertical = 10.dp)
-                    .align(Alignment.CenterHorizontally),
+                    Modifier
+                        .border(1.dp, Color.White, RoundedCornerShape(8.dp))
+                        .padding(horizontal = 15.dp, vertical = 10.dp)
+                        .align(Alignment.CenterHorizontally),
             )
 
             if (selectedMovies.isNotEmpty()) {
@@ -74,29 +75,28 @@ fun MyNewListItem(
                 selectedMovies.let { movies ->
                     LazyColumn(
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .heightIn(max = 400.dp),
+                            Modifier
+                                .fillMaxWidth()
+                                .heightIn(max = 400.dp),
                     ) {
                         items(movies) { movie ->
-                            SearchResultItem(movie = movie, onClick = {})
+                            SearchResultItem(showDeleteIcon = true, movie = movie, onClick = {}, removeMovie = removeMovie)
                         }
                     }
                 }
 
                 if (remainingMovies > 0) {
                     Text(
-                        text = "Add $remainingMovies more ${if (remainingMovies == 1) "movie" else "movies"} to this list...",
+                        text = "Add $remainingMovies more ${if (remainingMovies == 1) "movie" else "movies"} to save this list...",
                         color = Color.White,
                         fontSize = 14.sp,
                         maxLines = 2,
                         modifier =
-                        Modifier
-                            .padding(top = 12.dp)
-                            .align(Alignment.CenterHorizontally),
+                            Modifier
+                                .padding(top = 12.dp)
+                                .align(Alignment.CenterHorizontally),
                     )
                 }
-
             } else {
                 Text(
                     text = stringResource(id = R.string.add_5_movies_subtitle),
@@ -104,9 +104,9 @@ fun MyNewListItem(
                     fontSize = 14.sp,
                     maxLines = 2,
                     modifier =
-                    Modifier
-                        .padding(top = 18.dp)
-                        .align(Alignment.CenterHorizontally),
+                        Modifier
+                            .padding(top = 18.dp)
+                            .align(Alignment.CenterHorizontally),
                 )
             }
 
@@ -117,10 +117,11 @@ fun MyNewListItem(
                     onClick = onAddMoviesClick,
                     shape = RoundedCornerShape(16.dp),
                     colors =
-                    ButtonDefaults.buttonColors(
-                        backgroundColor = Color.White,
-                        contentColor = colorResource(id = R.color.teal_700),
+                        ButtonDefaults.buttonColors(
+                            backgroundColor = Color.White,
+                            contentColor = colorResource(id = R.color.teal_700),
                     ),
+                    enabled = selectedMovies.size < 5,
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_add),
@@ -137,12 +138,12 @@ fun MyNewListItem(
                     onClick = { onSaveListClick() },
                     shape = RoundedCornerShape(16.dp),
                     colors =
-                    ButtonDefaults.buttonColors(
-                        backgroundColor = Color.White,
-                        contentColor = colorResource(id = R.color.teal_700),
-                    ),
+                        ButtonDefaults.buttonColors(
+                            backgroundColor = Color.White,
+                            contentColor = colorResource(id = R.color.teal_700),
+                        ),
                     modifier = Modifier.padding(start = 12.dp),
-                    enabled = selectedMovies.size == 5
+                    enabled = selectedMovies.size == 5,
                 ) {
                     Text(text = stringResource(id = R.string.btn_save_list))
                 }
@@ -181,6 +182,7 @@ private fun MyNewListItemWithMovieInfoPreview() {
             onAddMoviesClick = {},
             onSaveListClick = {},
             selectedMovies = dummyMovies,
+            removeMovie = {},
         )
     }
 }

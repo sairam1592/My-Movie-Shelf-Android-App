@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,8 +36,10 @@ import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
 @Composable
 fun SearchResultItem(
+    showDeleteIcon: Boolean,
     movie: Movie,
     onClick: () -> Unit,
+    removeMovie: (Movie) -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -47,8 +52,11 @@ fun SearchResultItem(
             .clickable { onClick() },
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp).fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+            modifier =
+                Modifier
+                    .padding(horizontal = 8.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
         ) {
             Card(
                 modifier =
@@ -85,8 +93,9 @@ fun SearchResultItem(
 
             Column(
                 modifier =
-                Modifier
-                    .padding(10.dp),
+                    Modifier
+                        .padding(8.dp)
+                        .weight(1f),
             ) {
                 Text(
                     text = movie.title,
@@ -104,6 +113,17 @@ fun SearchResultItem(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
+
+            if (showDeleteIcon) {
+                IconButton(onClick = { removeMovie(movie) }) {
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(id = R.drawable.ic_delete),
+                        contentDescription = "Remove Movie",
+                        tint = Color.Red,
+                    )
+                }
+            }
         }
     }
 }
@@ -113,6 +133,7 @@ fun SearchResultItem(
 private fun MovieListItemPreview() {
     EmergeTestApplicationTheme {
         SearchResultItem(
+            showDeleteIcon = true,
             movie =
             Movie(
                 id = 1,
@@ -121,8 +142,9 @@ private fun MovieListItemPreview() {
                 poster_path = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
                 release_date = "",
                 vote_average = 0.0,
-            ),
+                ),
             onClick = {},
+            removeMovie = {},
         )
     }
 }

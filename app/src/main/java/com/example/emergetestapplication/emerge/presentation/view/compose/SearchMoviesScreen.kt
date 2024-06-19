@@ -111,7 +111,12 @@ fun SearchMoviesScreen(
             else -> {
                 LazyColumn {
                     items(moviesState.movies) { movie ->
-                        SearchResultItem(movie = movie, onClick = { onMovieSelected(movie) })
+                        SearchResultItem(
+                            showDeleteIcon = false,
+                            movie = movie,
+                            onClick = { onMovieSelected(movie) },
+                            removeMovie = {},
+                        )
                     }
                 }
             }

@@ -20,7 +20,7 @@
     <string name="login">Login</string>
     <string name="login_caps">LOGIN</string>
     <string name="signup_caps">SIGN UP</string>
-    <string name="add_5_movies_subtitle">Add 5 movies to this list...</string>
+    <string name="add_5_movies_subtitle">Add 5 movies to save this list...</string>
     <string name="btn_add_movies">Add Movies</string>
     <string name="btn_save_list">Save List</string>
     <string name="hint_search_movies">Search A Movie to Add to Your List</string>
