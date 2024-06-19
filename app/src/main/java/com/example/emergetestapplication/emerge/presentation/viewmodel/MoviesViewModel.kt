@@ -10,6 +10,7 @@ import com.example.emergetestapplication.emerge.domain.usecase.GetUserCategories
 import com.example.emergetestapplication.emerge.domain.usecase.SearchMoviesUseCase
 import com.example.emergetestapplication.emerge.presentation.view.state.HomeScreenState
 import com.example.emergetestapplication.emerge.presentation.view.state.MoviesState
+import com.example.emergetestapplication.emerge.presentation.view.state.SearchUserScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,11 +34,14 @@ class MoviesViewModel
         private val _homeScreenState = MutableStateFlow(HomeScreenState())
         val homeScreenState = _homeScreenState.asStateFlow()
 
+        private val _searchUserScreenState = MutableStateFlow(SearchUserScreenState())
+        val searchUserScreenState = _searchUserScreenState.asStateFlow()
+
         private val _addCategoryState = MutableStateFlow<Result<Unit>?>(null)
         val addCategoryState = _addCategoryState.asStateFlow()
 
-    private val _deleteCategoryState = MutableStateFlow<Result<Unit>?>(null)
-    val deleteCategoryState = _deleteCategoryState.asStateFlow()
+        private val _deleteCategoryState = MutableStateFlow<Result<Unit>?>(null)
+        val deleteCategoryState = _deleteCategoryState.asStateFlow()
 
         companion object {
             private const val KEY_TITLE = "title"
@@ -77,6 +81,21 @@ class MoviesViewModel
             }
         }
 
+        fun searchCategoriesByUser(username: String) {
+            _searchUserScreenState.value = SearchUserScreenState(isLoading = true)
+            viewModelScope.launch {
+                runCatching {
+                    getUserCategoriesUseCase(username).collect { userCategories ->
+                        _searchUserScreenState.value =
+                            SearchUserScreenState(isLoading = false, userCategories = userCategories)
+                    }
+                }.onFailure { exception ->
+                    _searchUserScreenState.value =
+                        SearchUserScreenState(isLoading = false, errorMessage = exception.message)
+                }
+            }
+        }
+
         fun addCategoryToFirebaseDB(
             username: String,
             categoryName: String,
@@ -98,24 +117,24 @@ class MoviesViewModel
             _addCategoryState.value = null
         }
 
-    fun deleteCategory(
-        username: String,
-        categoryName: String,
-    ) {
-        viewModelScope.launch {
-            runCatching {
-                deleteCategoryUseCase(username, categoryName)
-            }.onSuccess {
-                _deleteCategoryState.value = Result.success(Unit)
-            }.onFailure { exception ->
-                _deleteCategoryState.value = Result.failure(exception)
+        fun deleteCategory(
+            username: String,
+            categoryName: String,
+        ) {
+            viewModelScope.launch {
+                runCatching {
+                    deleteCategoryUseCase(username, categoryName)
+                }.onSuccess {
+                    _deleteCategoryState.value = Result.success(Unit)
+                }.onFailure { exception ->
+                    _deleteCategoryState.value = Result.failure(exception)
+                }
             }
         }
-    }
 
-    fun resetDeleteCategoryState() {
-        _deleteCategoryState.value = null
-    }
+        fun resetDeleteCategoryState() {
+            _deleteCategoryState.value = null
+        }
 
         fun searchMovies(query: String) {
             viewModelScope.launch {
@@ -135,7 +154,16 @@ class MoviesViewModel
             }
         }
 
+        fun setErrorMessageForSearchScreen(errorMessage: String) {
+            _searchUserScreenState.value =
+                SearchUserScreenState(isLoading = false, errorMessage = errorMessage)
+        }
+
         fun clearMoviesSearch() {
             _moviesState.value = MoviesState()
+        }
+
+        fun clearUserSearch() {
+            _searchUserScreenState.value = SearchUserScreenState()
         }
     }

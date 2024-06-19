@@ -16,6 +16,7 @@ import com.example.emergetestapplication.emerge.presentation.view.compose.Create
 import com.example.emergetestapplication.emerge.presentation.view.compose.HomeScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.LoginScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.SearchMoviesScreen
+import com.example.emergetestapplication.emerge.presentation.view.compose.SearchUsersScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.SignUpScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.StartUpScreen
 import com.example.emergetestapplication.emerge.presentation.viewmodel.AuthViewModel
@@ -35,6 +36,8 @@ sealed class Screen(
     object CreateList : Screen("create_list")
 
     object SearchMovie : Screen("search_movie")
+
+    object SearchUser : Screen("search_user")
 }
 
 @Composable
@@ -47,6 +50,7 @@ fun MoviesNavHost(
     val authState by authViewModel.authState.collectAsStateWithLifecycle()
     val moviesState by moviesViewModel.moviesState.collectAsStateWithLifecycle()
     val homeScreenState by moviesViewModel.homeScreenState.collectAsStateWithLifecycle()
+    val searchUserScreenState by moviesViewModel.searchUserScreenState.collectAsStateWithLifecycle()
     val addCategoryState by moviesViewModel.addCategoryState.collectAsStateWithLifecycle()
     val deleteCategoryState by moviesViewModel.deleteCategoryState.collectAsStateWithLifecycle()
 
@@ -96,7 +100,9 @@ fun MoviesNavHost(
                     }
                 },
                 onCreateListClick = { navController.navigate(Screen.CreateList.route) },
-                onSearchUsersClick = { },
+                onSearchUsersClick = {
+                    navController.navigate(Screen.SearchUser.route)
+                },
                 getUserCategories = {
                     authState.user?.let { it1 ->
                         moviesViewModel.getUserCategories(
@@ -157,6 +163,20 @@ fun MoviesNavHost(
                     navController.popBackStack()
                 },
                 clearMoviesSearch = { moviesViewModel.clearMoviesSearch() },
+            )
+        }
+
+        composable(Screen.SearchUser.route) {
+            SearchUsersScreen(
+                searchUserScreenState = searchUserScreenState,
+                searchUserCategories = { query ->
+                    if (query != authState.user?.username) {
+                        moviesViewModel.searchCategoriesByUser(query)
+                    } else {
+                        moviesViewModel.setErrorMessageForSearchScreen("Search for other users apart from your username")
+                    }
+                },
+                clearUserSearch = { moviesViewModel.clearUserSearch() },
             )
         }
     }

@@ -1,0 +1,253 @@
+package com.example.emergetestapplication.emerge.presentation.view.compose
+
+import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.emergetestapplication.R
+import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
+import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
+import com.example.emergetestapplication.emerge.presentation.view.state.SearchUserScreenState
+import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+@Composable
+fun SearchUsersScreen(
+    searchUserScreenState: SearchUserScreenState,
+    searchUserCategories: (String) -> Unit,
+    clearUserSearch: () -> Unit,
+) {
+    var query by remember { mutableStateOf(TextFieldValue("")) }
+    val coroutineScope = rememberCoroutineScope()
+    var searchJob by remember { mutableStateOf<Job?>(null) }
+    val context = LocalContext.current
+
+    DisposableEffect(Unit) {
+        onDispose {
+            query = TextFieldValue("")
+            clearUserSearch()
+        }
+    }
+
+    Column(
+        modifier =
+            Modifier
+                .background(color = colorResource(id = R.color.white))
+                .fillMaxSize()
+                .padding(16.dp),
+    ) {
+        OutlinedTextField(
+            value = query,
+            onValueChange = {
+                query = it
+                searchJob?.cancel()
+                searchJob =
+                    coroutineScope.launch {
+                        delay(500)
+                        if (query.text.isNotEmpty()) {
+                            searchUserCategories(query.text)
+                        }
+                    }
+            },
+            label = { Text("Search by Username") },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors =
+                TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = colorResource(id = R.color.black),
+                    backgroundColor = colorResource(id = R.color.white),
+                    focusedBorderColor = colorResource(id = R.color.teal_700),
+                    unfocusedBorderColor = colorResource(id = R.color.teal_700),
+                    cursorColor = colorResource(id = R.color.teal_700),
+                    focusedLabelColor = colorResource(id = R.color.teal_700),
+                    unfocusedLabelColor = colorResource(id = R.color.teal_700),
+                ),
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        when {
+            searchUserScreenState.isLoading -> {
+                CircularProgressIndicator(
+                    modifier =
+                        Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .size(24.dp)
+                            .align(Alignment.CenterHorizontally),
+                    color = colorResource(id = R.color.teal_700),
+                )
+            }
+
+            searchUserScreenState.errorMessage != null -> {
+                Toast.makeText(context, "No Result Found", Toast.LENGTH_SHORT).show()
+
+                Column(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top,
+                ) {
+                    Text(
+                        modifier =
+                            Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = 50.dp),
+                        fontSize = 16.sp,
+                        text = "Error: ${searchUserScreenState.errorMessage}",
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_generic_error),
+                        contentDescription = "Generic Error",
+                        modifier =
+                            Modifier
+                                .size(100.dp)
+                                .padding(top = 30.dp),
+                    )
+                }
+            }
+
+            else -> {
+                if (!searchUserScreenState.userCategories.isNullOrEmpty()) {
+                    CategoryList(
+                        categories = searchUserScreenState.userCategories,
+                        onDeleteCategory = { /*Do nothing*/ },
+                        isDeleteCategoryEnabled = false,
+                    )
+                } else {
+                    Column(
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top,
+                    ) {
+                        Text(
+                            modifier =
+                                Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(top = 50.dp),
+                            fontSize = 16.sp,
+                            text = "Try Searching entire Username to view their Favourite Lists!",
+                        )
+
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_search),
+                            contentDescription = "Search Image",
+                            modifier =
+                                Modifier
+                                    .size(100.dp)
+                                    .padding(top = 30.dp),
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun SearchUsersScreenPreview() {
+    EmergeTestApplicationTheme {
+        SearchUsersScreen(
+            searchUserCategories = {},
+            clearUserSearch = {},
+            searchUserScreenState =
+                SearchUserScreenState(
+                    isLoading = false,
+                    userCategories =
+                        listOf(
+                            FbCategoryModel(
+                                title = "Category 1",
+                                emoji = "🎬",
+                                movies =
+                                    listOf(
+                                        FbMovieModel(
+                                            id = 1,
+                                            title = "MoneyBall",
+                                            overview = "Great movie about Baseball and Statistics.",
+                                            posterPath = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
+                                        ),
+                                        FbMovieModel(
+                                            id = 2,
+                                            title = "The Dark Knight",
+                                            overview = "A movie about Batman.",
+                                            posterPath = "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+                                        ),
+                                    ),
+                            ),
+                            FbCategoryModel(
+                                title = "Category 2",
+                                emoji = "🎥",
+                                movies =
+                                    listOf(
+                                        FbMovieModel(
+                                            id = 1,
+                                            title = "MoneyBall",
+                                            overview = "Great movie about Baseball and Statistics.",
+                                            posterPath = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
+                                        ),
+                                        FbMovieModel(
+                                            id = 2,
+                                            title = "The Dark Knight",
+                                            overview = "A movie about Batman.",
+                                            posterPath = "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+                                        ),
+                                    ),
+                            ),
+                        ),
+                ),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SearchUsersScreenEmptyPreview() {
+    EmergeTestApplicationTheme {
+        SearchUsersScreen(
+            searchUserCategories = {},
+            clearUserSearch = {},
+            searchUserScreenState =
+                SearchUserScreenState(
+                    isLoading = false,
+                    errorMessage = "No Result Found",
+                    userCategories = null,
+                ),
+        )
+    }
+}

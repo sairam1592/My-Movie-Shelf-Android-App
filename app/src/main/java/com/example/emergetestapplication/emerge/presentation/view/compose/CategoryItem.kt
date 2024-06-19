@@ -40,6 +40,7 @@ import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 fun CategoryItem(
     category: FbCategoryModel,
     onDeleteCategory: (FbCategoryModel) -> Unit,
+    isDeleteCategoryEnabled: Boolean = false,
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
@@ -88,7 +89,9 @@ fun CategoryItem(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onLongPress = {
-                        showDialog = true
+                            if (isDeleteCategoryEnabled) {
+                                showDialog = true
+                        }
                     },
                 )
             },
@@ -134,6 +137,7 @@ fun CategoryItem(
 private fun CategoryItemPreview() {
     EmergeTestApplicationTheme {
         CategoryItem(
+            isDeleteCategoryEnabled = true,
             onDeleteCategory = {},
             category =
             FbCategoryModel(

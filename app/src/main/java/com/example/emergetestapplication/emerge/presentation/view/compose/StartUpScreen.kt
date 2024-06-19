@@ -59,7 +59,7 @@ fun StartUpScreen(
             onClick = onNavigateToLogin,
             modifier =
             Modifier
-                .padding(top = 10.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
+                .padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
                     .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors =
@@ -74,7 +74,7 @@ fun StartUpScreen(
             onClick = onNavigateToSignUp,
             modifier =
             Modifier
-                    .padding(top = 10.dp, start = 16.dp, end = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp)
                     .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors =

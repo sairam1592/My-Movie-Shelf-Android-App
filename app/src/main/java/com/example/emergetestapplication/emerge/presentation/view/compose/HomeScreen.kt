@@ -149,6 +149,7 @@ fun HomeScreen(
                             categories =
                                 homeScreenState.userCategories,
                             onDeleteCategory = deleteCategory,
+                            isDeleteCategoryEnabled = true
                         )
                     }
                 } else {
@@ -221,29 +222,6 @@ private fun HomeButtonSection(
             onClick = { onSearchUsersClick() },
         ) {
             Text(text = "Search Users", color = Color.Black)
-        }
-    }
-}
-
-@Composable
-private fun CategoryList(
-    categories: List<FbCategoryModel>,
-    onDeleteCategory: (FbCategoryModel) -> Unit,
-) {
-    val listState = rememberLazyListState()
-
-    LazyColumn(
-        state = listState,
-        modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-    ) {
-        items(categories) { category ->
-            CategoryItem(
-                category = category,
-                onDeleteCategory = onDeleteCategory,
-            )
         }
     }
 }
@@ -325,57 +303,6 @@ private fun HomeScreenEmptyPreview() {
             deleteCategory = {},
             deleteCategoryState = null,
             resetDeleteCategoryState = {},
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun CategoryListPreview() {
-    EmergeTestApplicationTheme {
-        CategoryList(
-            onDeleteCategory = {},
-            categories =
-                listOf(
-                    FbCategoryModel(
-                        title = "Category 1",
-                        emoji = "🎬",
-                        movies =
-                            listOf(
-                                FbMovieModel(
-                                    id = 1,
-                                    title = "MoneyBall",
-                                    overview = "Great movie about Baseball and Statistics.",
-                                    posterPath = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
-                                ),
-                                FbMovieModel(
-                                    id = 2,
-                                    title = "The Dark Knight",
-                                    overview = "A movie about Batman.",
-                                    posterPath = "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-                                ),
-                            ),
-                    ),
-                    FbCategoryModel(
-                        title = "Category 2",
-                        emoji = "🎥",
-                        movies =
-                            listOf(
-                                FbMovieModel(
-                                    id = 1,
-                                    title = "MoneyBall",
-                                    overview = "Great movie about Baseball and Statistics.",
-                                    posterPath = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
-                                ),
-                                FbMovieModel(
-                                    id = 2,
-                                    title = "The Dark Knight",
-                                    overview = "A movie about Batman.",
-                                    posterPath = "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-                                ),
-                            ),
-                    ),
-                ),
         )
     }
 }
