@@ -25,6 +25,9 @@ class AuthViewModel
         private val _authState = MutableStateFlow(AuthState())
         val authState: StateFlow<AuthState> = _authState.asStateFlow()
 
+        private val _errorEvent = MutableStateFlow(0)
+        val errorEvent = _errorEvent.asStateFlow()
+
         fun signUp(
             username: String,
             password: String,
@@ -52,18 +55,33 @@ class AuthViewModel
         ) {
             viewModelScope.launch {
                 _authState.value = _authState.value.copy(isLoading = true)
-                runCatching {
-                    loginUseCase(username, password)
-                }.onSuccess { result ->
-                    _authState.value =
-                        _authState.value.copy(isLoading = false, user = result.getOrNull())
-                }.onFailure { exception ->
-                    _authState.value =
-                        _authState.value.copy(
-                            isLoading = false,
-                            errorMessage = "Login failed",
-                        )
-                }
+                val result =
+                    runCatching {
+                        loginUseCase(username, password)
+                    }
+
+                result
+                    .onSuccess { userResult ->
+                        userResult
+                            .onSuccess { user ->
+                                _authState.value =
+                                    _authState.value.copy(isLoading = false, user = user)
+                            }.onFailure { exception ->
+                                _authState.value =
+                                    _authState.value.copy(
+                                        isLoading = false,
+                                        errorMessage = exception.message ?: "Login failed",
+                                    )
+                                _errorEvent.value += 1
+                            }
+                    }.onFailure { exception ->
+                        _authState.value =
+                            _authState.value.copy(
+                                isLoading = false,
+                                errorMessage = exception.message ?: "Login failed",
+                            )
+                        _errorEvent.value += 1
+                    }
             }
         }
 
@@ -74,12 +92,13 @@ class AuthViewModel
                     logoutUseCase()
                 }.onSuccess {
                     _authState.value = _authState.value.copy(isLoading = false, user = null)
-            }.onFailure { exception ->
-                _authState.value = _authState.value.copy(
-                    isLoading = false,
-                        errorMessage = "Logout failed",
-                    )
+                }.onFailure { exception ->
+                    _authState.value =
+                        _authState.value.copy(
+                            isLoading = false,
+                            errorMessage = "Logout failed",
+                        )
                 }
+            }
         }
     }
-}

@@ -9,7 +9,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.data.model.movies.Movie
+import com.example.emergetestapplication.emerge.domain.mapper.MovieMapper.toFbMovieModelModel
 import com.example.emergetestapplication.emerge.presentation.view.compose.CreateListScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.HomeScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.LoginScreen
@@ -23,10 +25,15 @@ sealed class Screen(
     val route: String,
 ) {
     object Startup : Screen("startup")
+
     object Login : Screen("login")
+
     object Signup : Screen("signup")
+
     object Home : Screen("home")
+
     object CreateList : Screen("create_list")
+
     object SearchMovie : Screen("search_movie")
 }
 
@@ -39,6 +46,8 @@ fun MoviesNavHost(
     val authState by authViewModel.authState.collectAsStateWithLifecycle()
     val moviesState by moviesViewModel.moviesState.collectAsStateWithLifecycle()
     val homeScreenState by moviesViewModel.homeScreenState.collectAsStateWithLifecycle()
+    val addCategoryState by moviesViewModel.addCategoryState.collectAsStateWithLifecycle()
+    val errorEventState by authViewModel.errorEvent.collectAsStateWithLifecycle()
 
     var selectedMovies by remember { mutableStateOf<List<Movie>>(emptyList()) }
 
@@ -65,6 +74,7 @@ fun MoviesNavHost(
         composable(Screen.Login.route) {
             LoginScreen(
                 authState = authState,
+                errorEvent = errorEventState,
                 onLogin = { username, password -> authViewModel.login(username, password) },
                 onLoginSuccess = {
                     navController.navigate(Screen.Home.route) {
@@ -86,21 +96,49 @@ fun MoviesNavHost(
                 },
                 onCreateListClick = { navController.navigate(Screen.CreateList.route) },
                 onSearchUsersClick = { },
-                onFetchUserCategories = {
+                getUserCategories = {
                     authState.user?.let { it1 ->
                         moviesViewModel.getUserCategories(
                             it1.username,
                         )
                     }
                 },
+                deleteCategory = { category ->
+                    // TODO add API implementation
+                },
             )
         }
 
         composable(Screen.CreateList.route) {
             CreateListScreen(
+                title = moviesViewModel.title.collectAsStateWithLifecycle().value,
+                setTitle = { moviesViewModel.setTitle(it) },
+                emoji = moviesViewModel.emoji.collectAsStateWithLifecycle().value,
+                setEmoji = { moviesViewModel.setEmoji(it) },
                 onAddMoviesClick = { navController.navigate(Screen.SearchMovie.route) },
-                onSaveListClick = { },
+                onSaveListClick = { title, emoji, movies ->
+                    val fbMovies =
+                        movies.map { movie ->
+                            toFbMovieModelModel(movie)
+                        }
+                    val category =
+                        FbCategoryModel(
+                            emoji = emoji,
+                            movies = fbMovies,
+                        )
+                    authState.user?.username?.let { it1 ->
+                        moviesViewModel.addCategoryToFirebaseDB(
+                            it1,
+                            title,
+                            category,
+                        )
+                    }
+                },
                 selectedMovies = selectedMovies,
+                resetSelectedMovies = { selectedMovies = emptyList() },
+                addCategoryState = addCategoryState,
+                resetAddCategoryState = { moviesViewModel.resetAddCategoryState() },
+                navController = navController,
             )
         }
 

@@ -1,7 +1,7 @@
 package com.example.emergetestapplication.emerge.data.datasource.local
 
-import com.example.emergetestapplication.emerge.data.model.user.User
 import com.example.emergetestapplication.emerge.data.model.db.UserDao
+import com.example.emergetestapplication.emerge.data.model.user.User
 import com.example.emergetestapplication.emerge.domain.mapper.UserEntityToModelMapper.toEntity
 import com.example.emergetestapplication.emerge.domain.mapper.UserEntityToModelMapper.toModel
 import kotlinx.coroutines.Dispatchers
@@ -34,8 +34,8 @@ class AuthLocalDataSourceImpl
                     Result.success(userEntity.toModel())
                 } else {
                     Result.failure(Exception("No account found with these credentials"))
+                }
             }
-        }
 
-    override suspend fun logout(): Result<Unit> = Result.success(Unit)
+        override suspend fun logout(): Result<Unit> = Result.success(Unit)
     }

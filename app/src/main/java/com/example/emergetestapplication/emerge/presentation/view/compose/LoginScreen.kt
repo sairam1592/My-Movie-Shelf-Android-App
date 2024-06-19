@@ -36,6 +36,7 @@ import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 @Composable
 fun LoginScreen(
     authState: AuthState,
+    errorEvent: Int,
     onLogin: (String, String) -> Unit,
     onLoginSuccess: () -> Unit,
 ) {
@@ -45,18 +46,18 @@ fun LoginScreen(
 
     Column(
         modifier =
-        Modifier
-            .background(color = colorResource(id = R.color.white))
-            .fillMaxSize()
-            .padding(16.dp),
+            Modifier
+                .background(color = colorResource(id = R.color.white))
+                .fillMaxSize()
+                .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Please Login to Continue",
+            text = "Please Login to Access Movies",
             color = Color.Black,
             fontSize = 20.sp,
-            maxLines = 1
+            maxLines = 1,
         )
 
         TextField(
@@ -66,13 +67,13 @@ fun LoginScreen(
             label = { Text("Username") },
             shape = RoundedCornerShape(4.dp),
             colors =
-            TextFieldDefaults.textFieldColors(
-                textColor = colorResource(id = R.color.black),
-                focusedIndicatorColor = colorResource(id = R.color.teal_700),
-                cursorColor = colorResource(id = R.color.teal_700),
-                focusedLabelColor = colorResource(id = R.color.teal_700),
-                unfocusedLabelColor = colorResource(id = R.color.teal_700),
-            ),
+                TextFieldDefaults.textFieldColors(
+                    textColor = colorResource(id = R.color.black),
+                    focusedIndicatorColor = colorResource(id = R.color.teal_700),
+                    cursorColor = colorResource(id = R.color.teal_700),
+                    focusedLabelColor = colorResource(id = R.color.teal_700),
+                    unfocusedLabelColor = colorResource(id = R.color.teal_700),
+                ),
         )
         TextField(
             modifier = Modifier.padding(top = 25.dp),
@@ -88,14 +89,14 @@ fun LoginScreen(
                     cursorColor = colorResource(id = R.color.teal_700),
                     focusedLabelColor = colorResource(id = R.color.teal_700),
                     unfocusedLabelColor = colorResource(id = R.color.teal_700),
-            ),
+                ),
         )
         Button(
             onClick = { onLogin(username, password) },
             modifier =
                 Modifier
                     .fillMaxWidth()
-                .padding(16.dp),
+                    .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
@@ -115,7 +116,7 @@ fun LoginScreen(
         }
     }
 
-    LaunchedEffect(authState.errorMessage) {
+    LaunchedEffect(errorEvent) {
         authState.errorMessage?.let { message ->
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
@@ -126,6 +127,6 @@ fun LoginScreen(
 @Composable
 private fun SignUpScreenPreview() {
     EmergeTestApplicationTheme {
-        LoginScreen(authState = AuthState(), onLogin = { _, _ -> }, onLoginSuccess = {})
+        LoginScreen(authState = AuthState(), onLogin = { _, _ -> }, onLoginSuccess = {}, errorEvent = 0)
     }
 }

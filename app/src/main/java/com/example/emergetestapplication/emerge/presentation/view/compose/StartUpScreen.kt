@@ -36,17 +36,28 @@ fun StartUpScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Welcome to Movies App",
+            text = "Hi, Welcome to Your Movies App",
             color = Color.Black,
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             maxLines = 1
+        )
+
+        Text(
+            modifier = Modifier.padding(top = 10.dp),
+            text = "- Curate multiple Favourite List and Add Top 5 Movies to it.\n" +
+                    "- Search your favourite movie and add it to your list.\n" +
+                    "- Don't have an account? Signup now to get started.\n" +
+                    "- Already have an account? Login now to access your list.\n",
+            color = Color.DarkGray,
+            fontSize = 14.sp,
+            lineHeight = 25.sp,
         )
 
         Button(
             onClick = onNavigateToLogin,
             modifier =
             Modifier
-                    .padding(top = 30.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 10.dp)
                     .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors =

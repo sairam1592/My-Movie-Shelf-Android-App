@@ -1,8 +1,10 @@
 package com.example.emergetestapplication.emerge.presentation.view.compose
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,13 +17,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,9 +39,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.emergetestapplication.R
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
-import com.example.emergetestapplication.emerge.domain.mapper.MovieMapper.fromFbModelList
+import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
 import com.example.emergetestapplication.emerge.presentation.view.state.AuthState
 import com.example.emergetestapplication.emerge.presentation.view.state.HomeScreenState
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
@@ -45,160 +55,183 @@ fun HomeScreen(
     onLogoutSuccess: () -> Unit,
     onCreateListClick: () -> Unit,
     onSearchUsersClick: () -> Unit,
-    onFetchUserCategories: () -> Unit,
+    getUserCategories: () -> Unit,
+    deleteCategory: (FbCategoryModel) -> Unit,
 ) {
     val context = LocalContext.current
+    val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(Unit) {
-        onFetchUserCategories()
+        getUserCategories()
     }
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-    ) {
-        Column(
-            modifier =
-            Modifier
-                .background(color = colorResource(id = R.color.white))
-                .fillMaxSize()
-                .padding(16.dp)
-                .align(Alignment.TopCenter),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(text = "Welcome!", style = MaterialTheme.typography.h6)
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row {
-                Button(
-                    modifier =
-                        Modifier
-                            .wrapContentSize(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors =
-                        ButtonDefaults.buttonColors(
-                            backgroundColor = colorResource(id = R.color.teal_700),
-                            contentColor = Color.White,
-                        ),
-                    onClick = { onCreateListClick() },
-                ) {
-                    Text(text = "Create Your List")
+    Scaffold(
+        scaffoldState = scaffoldState,
+        backgroundColor = colorResource(id = R.color.white),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        style = MaterialTheme.typography.h6,
+                        text = "Welcome ${authState.user?.username?.trim()}",
+                    )
+                },
+                actions = {
+                    IconButton(onClick = {
+                        onLogout()
+                        Toast.makeText(context, "Logout Successful", Toast.LENGTH_SHORT).show()
+                    }) {
+                        Text(
+                            style = MaterialTheme.typography.h6,
+                            modifier = Modifier.padding(end = 16.dp),
+                            text =
+                                "Logout",
+                            color = Color.White,
+                        )
+                    }
+                },
+                backgroundColor = colorResource(id = R.color.teal_700),
+                contentColor = Color.White,
+            )
+        },
+        content = { padding ->
+            Box(
+                modifier =
+                    Modifier
+                        .background(color = colorResource(id = R.color.white))
+                        .padding(horizontal = 16.dp)
+                        .fillMaxSize(),
+            ) {
+                if (!authState.isAuthenticated) {
+                    onLogoutSuccess()
                 }
 
-                Button(
-                    modifier =
-                    Modifier
-                        .padding(start = 16.dp)
-                        .wrapContentSize(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors =
-                        ButtonDefaults.buttonColors(
-                            backgroundColor = colorResource(id = R.color.teal_700),
-                            contentColor = Color.White,
-                        ),
-                    onClick = { onSearchUsersClick() },
-                ) {
-                    Text(text = "Search Users")
+                if (!homeScreenState.userCategories.isNullOrEmpty()) {
+                    Column(
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .align(Alignment.TopCenter),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        HomeButtonSection(
+                            onCreateListClick = onCreateListClick,
+                            onSearchUsersClick = onSearchUsersClick,
+                        )
+
+                        Text(
+                            text = "Your Favourite Lists:",
+                            style = MaterialTheme.typography.h6,
+                            modifier = Modifier.padding(top = 10.dp),
+                        )
+
+                        Text(
+                            text = "(Long Press a Category card to delete it)",
+                            fontSize = 12.sp,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+
+                        CategoryList(
+                            categories =
+                                homeScreenState.userCategories,
+                            onDeleteCategory = deleteCategory,
+                        )
+                    }
+                } else {
+                    Column(
+                        modifier =
+                            Modifier
+                                .padding(16.dp)
+                                .align(Alignment.TopCenter),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        HomeButtonSection(
+                            onCreateListClick = onCreateListClick,
+                            onSearchUsersClick = onSearchUsersClick,
+                        )
+
+                        Spacer(modifier = Modifier.height(150.dp))
+
+                        Image(
+                            painter = painterResource(id = R.drawable.create_list_empty_img),
+                            contentDescription = "Create List Empty Image",
+                            modifier =
+                                Modifier
+                                    .size(130.dp),
+                        )
+
+                        Text(
+                            style = MaterialTheme.typography.h6,
+                            modifier = Modifier.padding(top = 18.dp),
+                            text = "Start creating your list now!",
+                        )
+                    }
                 }
             }
+        },
+    )
+}
+
+@Composable
+private fun HomeButtonSection(
+    onCreateListClick: () -> Unit,
+    onSearchUsersClick: () -> Unit,
+) {
+    Row(modifier = Modifier.padding(top = 16.dp)) {
+        Button(
+            modifier = Modifier.wrapContentSize(),
+            shape = RoundedCornerShape(16.dp),
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White,
+                    contentColor = Color.Black,
+                ),
+            border = BorderStroke(2.dp, color = colorResource(id = R.color.teal_700)),
+            onClick = { onCreateListClick() },
+        ) {
+            Text(text = "Create Your List", color = Color.Black)
         }
 
         Button(
             modifier =
-            Modifier
-                .padding(20.dp)
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter),
+                Modifier
+                    .padding(start = 16.dp)
+                    .wrapContentSize(),
             shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
-                    backgroundColor = colorResource(id = R.color.teal_700),
-                    contentColor = Color.White,
+                    backgroundColor = Color.White,
+                    contentColor = Color.Black,
                 ),
-            onClick = {
-                onLogout()
-                Toast.makeText(context, "Logout Successful", Toast.LENGTH_SHORT).show()
-            },
+            border = BorderStroke(2.dp, color = colorResource(id = R.color.teal_700)),
+            onClick = { onSearchUsersClick() },
         ) {
-            Text("Logout", color = Color.White)
-        }
-
-        if (!authState.isAuthenticated) {
-            onLogoutSuccess()
-        }
-
-        if (authState.errorMessage != null) {
-            Toast.makeText(context, authState.errorMessage, Toast.LENGTH_SHORT).show()
-            Text(text = authState.errorMessage, color = Color.Red)
-        }
-
-        if (homeScreenState.userCategories != null) {
-            CategoryList(
-                categories =
-                    homeScreenState.userCategories
-                        ?.categories
-                        ?.entries
-                        ?.toList()
-                        ?: emptyList(),
-            )
-        } else {
-            Column(
-                modifier =
-                    Modifier
-                        .padding(16.dp)
-                        .align(Alignment.Center),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.create_list_empty_img),
-                    contentDescription = "Create List Empty Image",
-                    modifier =
-                        Modifier
-                            .size(130.dp),
-                )
-
-                Text(
-                    modifier = Modifier.padding(top = 20.dp),
-                    text = "Start creating your list now!",
-                    style = MaterialTheme.typography.body1,
-                )
-            }
+            Text(text = "Search Users", color = Color.Black)
         }
     }
 }
 
 @Composable
-fun CategoryList(categories: List<Map.Entry<String, FbCategoryModel>>) {
-    LazyColumn {
-        items(categories) { entry ->
-            val categoryName = entry.key
-            val category = entry.value
-            CategoryItem(
-                categoryName = categoryName,
-                category = category,
-                onAddMoviesClick = { /*TODO*/ },
-                onSaveListClick = { /*TODO*/ },
-            )
-        }
-    }
-}
-
-@Composable
-fun CategoryItem(
-    categoryName: String,
-    category: FbCategoryModel,
-    onAddMoviesClick: () -> Unit,
-    onSaveListClick: () -> Unit,
+private fun CategoryList(
+    categories: List<FbCategoryModel>,
+    onDeleteCategory: (FbCategoryModel) -> Unit,
 ) {
-    MyNewListItem(
-        emoji = category.emoji,
-        title = categoryName,
-        onAddMoviesClick = onAddMoviesClick,
-        onSaveListClick = onSaveListClick,
-        selectedMovies = fromFbModelList(category.movies)
-    )
+    val listState = rememberLazyListState()
+
+    LazyColumn(
+        state = listState,
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+    ) {
+        items(categories) { category ->
+            CategoryItem(
+                category = category,
+                onDeleteCategory = onDeleteCategory,
+            )
+        }
+    }
 }
 
 @Preview
@@ -207,12 +240,124 @@ private fun HomeScreenPreview() {
     EmergeTestApplicationTheme {
         HomeScreen(
             authState = AuthState(),
+            homeScreenState =
+                HomeScreenState(
+                    userCategories =
+                        listOf(
+                            FbCategoryModel(
+                                title = "Category 1",
+                                emoji = "🎬",
+                                movies =
+                                    listOf(
+                                        FbMovieModel(
+                                            id = 1,
+                                            title = "MoneyBall",
+                                            overview = "Great movie about Baseball and Statistics.",
+                                            posterPath = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
+                                        ),
+                                        FbMovieModel(
+                                            id = 2,
+                                            title = "The Dark Knight",
+                                            overview = "A movie about Batman.",
+                                            posterPath = "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+                                        ),
+                                    ),
+                            ),
+                            FbCategoryModel(
+                                title = "Category 2",
+                                emoji = "🎥",
+                                movies =
+                                    listOf(
+                                        FbMovieModel(
+                                            id = 1,
+                                            title = "MoneyBall",
+                                            overview = "Great movie about Baseball and Statistics.",
+                                            posterPath = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
+                                        ),
+                                        FbMovieModel(
+                                            id = 2,
+                                            title = "The Dark Knight",
+                                            overview = "A movie about Batman.",
+                                            posterPath = "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+                                        ),
+                                    ),
+                            ),
+                        ),
+                ),
+            onLogout = {},
+            onLogoutSuccess = {},
+            onCreateListClick = {},
+            onSearchUsersClick = {},
+            getUserCategories = {},
+            deleteCategory = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HomeScreenEmptyPreview() {
+    EmergeTestApplicationTheme {
+        HomeScreen(
+            authState = AuthState(),
             homeScreenState = HomeScreenState(),
             onLogout = {},
             onLogoutSuccess = {},
             onCreateListClick = {},
             onSearchUsersClick = {},
-            onFetchUserCategories = {},
+            getUserCategories = {},
+            deleteCategory = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun CategoryListPreview() {
+    EmergeTestApplicationTheme {
+        CategoryList(
+            onDeleteCategory = {},
+            categories =
+                listOf(
+                    FbCategoryModel(
+                        title = "Category 1",
+                        emoji = "🎬",
+                        movies =
+                            listOf(
+                                FbMovieModel(
+                                    id = 1,
+                                    title = "MoneyBall",
+                                    overview = "Great movie about Baseball and Statistics.",
+                                    posterPath = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
+                                ),
+                                FbMovieModel(
+                                    id = 2,
+                                    title = "The Dark Knight",
+                                    overview = "A movie about Batman.",
+                                    posterPath = "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+                                ),
+                            ),
+                    ),
+                    FbCategoryModel(
+                        title = "Category 2",
+                        emoji = "🎥",
+                        movies =
+                            listOf(
+                                FbMovieModel(
+                                    id = 1,
+                                    title = "MoneyBall",
+                                    overview = "Great movie about Baseball and Statistics.",
+                                    posterPath = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
+                                ),
+                                FbMovieModel(
+                                    id = 2,
+                                    title = "The Dark Knight",
+                                    overview = "A movie about Batman.",
+                                    posterPath = "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+                                ),
+                            ),
+                    ),
+                ),
         )
     }
 }

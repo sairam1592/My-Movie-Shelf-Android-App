@@ -44,10 +44,10 @@ fun SignUpScreen(
 
     Column(
         modifier =
-        Modifier
-            .background(color = colorResource(id = R.color.white))
-            .fillMaxSize()
-            .padding(16.dp),
+            Modifier
+                .background(color = colorResource(id = R.color.white))
+                .fillMaxSize()
+                .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -55,7 +55,7 @@ fun SignUpScreen(
             text = "Please Sign Up to Access Movies",
             color = Color.Black,
             fontSize = 20.sp,
-            maxLines = 1
+            maxLines = 1,
         )
 
         TextField(
@@ -87,15 +87,15 @@ fun SignUpScreen(
                     cursorColor = colorResource(id = R.color.teal_700),
                     focusedLabelColor = colorResource(id = R.color.teal_700),
                     unfocusedLabelColor = colorResource(id = R.color.teal_700),
-            ),
+                ),
         )
         Button(
             onClick = { onSignUp(username, password) },
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-                shape = RoundedCornerShape(16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(id = R.color.teal_700),
@@ -111,10 +111,6 @@ fun SignUpScreen(
         if (authState.isAuthenticated) {
             Toast.makeText(context, "Sign Up Successful", Toast.LENGTH_SHORT).show()
             onSignUpSuccess()
-        }
-        if (authState.errorMessage != null) {
-            Text(text = authState.errorMessage, color = Color.Red)
-            Toast.makeText(context, authState.errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -1,9 +1,9 @@
 package com.example.emergetestapplication.emerge.presentation.view.state
 
-import com.example.emergetestapplication.emerge.data.model.firebase.FbUserModel
+import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 
 data class HomeScreenState(
-    val userCategories: FbUserModel? = null,
+    val userCategories: List<FbCategoryModel>? = null,
     val errorMessage: String? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
 )

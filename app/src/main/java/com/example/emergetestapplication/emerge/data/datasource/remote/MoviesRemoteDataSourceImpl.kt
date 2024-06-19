@@ -1,7 +1,7 @@
 package com.example.emergetestapplication.emerge.data.datasource.remote
 
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
-import com.example.emergetestapplication.emerge.data.model.firebase.FbUserModel
+import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
 import com.example.emergetestapplication.emerge.data.model.movies.MovieResponse
 import com.example.emergetestapplication.emerge.data.network.APIService
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,24 +21,37 @@ class MoviesRemoteDataSourceImpl
         private val apiService: APIService,
         private val fireStore: FirebaseFirestore,
     ) : MoviesRemoteDataSource {
-        override fun getPopularMovies(): Flow<Result<MovieResponse>> =
-            flow {
-                emit(Result.success(apiService.getPopularMovies()))
-            }.flowOn(Dispatchers.IO)
-
         override fun searchMovies(query: String): Flow<Result<MovieResponse>> =
             flow {
                 emit(Result.success(apiService.searchMovies(query)))
             }.flowOn(Dispatchers.IO)
 
-        override suspend fun getUserCategories(username: String): FbUserModel? =
+        override suspend fun getUserCategories(username: String): List<FbCategoryModel>? =
             suspendCoroutine { continuation ->
                 fireStore
                     .collection("users")
                     .document(username)
                     .get()
                     .addOnSuccessListener { document ->
-                        val user = document.toObject(FbUserModel::class.java)
+                        val user =
+                            document.data?.mapNotNull { entry ->
+                                val categoryData =
+                                    entry.value as? Map<*, *> ?: return@mapNotNull null
+                                val title = categoryData["title"] as? String ?: ""
+                                val emoji = categoryData["emoji"] as? String ?: ""
+                                val moviesList = categoryData["movies"] as? List<Map<*, *>>
+                                val movies =
+                                    moviesList?.map { movieData ->
+                                        FbMovieModel(
+                                            id = (movieData["id"] as? Long)?.toInt() ?: 0,
+                                            title = movieData["title"] as? String ?: "",
+                                            overview = movieData["overview"] as? String ?: "",
+                                            posterPath = movieData["posterPath"] as? String ?: "",
+                                        )
+                                    } ?: emptyList()
+                                FbCategoryModel(title = title, emoji = emoji, movies = movies)
+                            } ?: emptyList()
+
                         continuation.resume(user)
                     }.addOnFailureListener { exception ->
                         continuation.resumeWithException(exception)
@@ -50,7 +63,23 @@ class MoviesRemoteDataSourceImpl
             categoryName: String,
             category: FbCategoryModel,
         ) = suspendCoroutine { continuation ->
-            val categoryMap = mapOf("categories.$categoryName" to category)
+            val categoryMap =
+                mapOf(
+                    categoryName to
+                        mapOf(
+                            "title" to categoryName,
+                            "emoji" to category.emoji,
+                            "movies" to
+                                category.movies.map {
+                                    mapOf(
+                                        "id" to it.id,
+                                        "title" to it.title,
+                                        "overview" to it.overview,
+                                        "posterPath" to it.posterPath,
+                                    )
+                                },
+                        ),
+                )
             fireStore
                 .collection("users")
                 .document(username)
@@ -58,7 +87,7 @@ class MoviesRemoteDataSourceImpl
                 .addOnSuccessListener {
                     continuation.resume(Unit)
                 }.addOnFailureListener { exception ->
-                continuation.resumeWithException(exception)
-            }
-    }
+                    continuation.resumeWithException(exception)
+                }
+        }
     }
