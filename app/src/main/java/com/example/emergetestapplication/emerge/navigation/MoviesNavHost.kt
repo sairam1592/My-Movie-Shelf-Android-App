@@ -43,11 +43,12 @@ fun MoviesNavHost(
     authViewModel: AuthViewModel,
     moviesViewModel: MoviesViewModel,
 ) {
+    val errorEventState by authViewModel.errorEvent.collectAsStateWithLifecycle()
     val authState by authViewModel.authState.collectAsStateWithLifecycle()
     val moviesState by moviesViewModel.moviesState.collectAsStateWithLifecycle()
     val homeScreenState by moviesViewModel.homeScreenState.collectAsStateWithLifecycle()
     val addCategoryState by moviesViewModel.addCategoryState.collectAsStateWithLifecycle()
-    val errorEventState by authViewModel.errorEvent.collectAsStateWithLifecycle()
+    val deleteCategoryState by moviesViewModel.deleteCategoryState.collectAsStateWithLifecycle()
 
     var selectedMovies by remember { mutableStateOf<List<Movie>>(emptyList()) }
 
@@ -104,8 +105,13 @@ fun MoviesNavHost(
                     }
                 },
                 deleteCategory = { category ->
-                    // TODO add API implementation
+                    moviesViewModel.deleteCategory(
+                        authState.user?.username ?: "",
+                        category.title,
+                    )
                 },
+                deleteCategoryState = deleteCategoryState,
+                resetDeleteCategoryState = { moviesViewModel.resetDeleteCategoryState() },
             )
         }
 

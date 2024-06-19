@@ -14,4 +14,9 @@ interface MovieRepository {
         categoryName: String,
         category: FbCategoryModel,
     )
+
+    suspend fun deleteCategory(
+        username: String,
+        categoryName: String,
+    )
 }

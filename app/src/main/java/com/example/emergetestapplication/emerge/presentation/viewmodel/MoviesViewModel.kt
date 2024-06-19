@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.domain.usecase.AddCategoryToFireBaseDBUseCase
+import com.example.emergetestapplication.emerge.domain.usecase.DeleteCategoryUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.GetUserCategoriesUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.SearchMoviesUseCase
 import com.example.emergetestapplication.emerge.presentation.view.state.HomeScreenState
@@ -23,6 +24,7 @@ class MoviesViewModel
         private val searchMoviesUseCase: SearchMoviesUseCase,
         private val getUserCategoriesUseCase: GetUserCategoriesUseCase,
         private val addCategoryUseCase: AddCategoryToFireBaseDBUseCase,
+        private val deleteCategoryUseCase: DeleteCategoryUseCase,
         private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private val _moviesState = MutableStateFlow(MoviesState())
@@ -33,6 +35,9 @@ class MoviesViewModel
 
         private val _addCategoryState = MutableStateFlow<Result<Unit>?>(null)
         val addCategoryState = _addCategoryState.asStateFlow()
+
+    private val _deleteCategoryState = MutableStateFlow<Result<Unit>?>(null)
+    val deleteCategoryState = _deleteCategoryState.asStateFlow()
 
         companion object {
             private const val KEY_TITLE = "title"
@@ -92,6 +97,25 @@ class MoviesViewModel
         fun resetAddCategoryState() {
             _addCategoryState.value = null
         }
+
+    fun deleteCategory(
+        username: String,
+        categoryName: String,
+    ) {
+        viewModelScope.launch {
+            runCatching {
+                deleteCategoryUseCase(username, categoryName)
+            }.onSuccess {
+                _deleteCategoryState.value = Result.success(Unit)
+            }.onFailure { exception ->
+                _deleteCategoryState.value = Result.failure(exception)
+            }
+        }
+    }
+
+    fun resetDeleteCategoryState() {
+        _deleteCategoryState.value = null
+    }
 
         fun searchMovies(query: String) {
             viewModelScope.launch {

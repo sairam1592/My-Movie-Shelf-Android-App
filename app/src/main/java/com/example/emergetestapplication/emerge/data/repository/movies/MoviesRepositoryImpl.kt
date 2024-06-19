@@ -26,4 +26,11 @@ class MovieRepositoryImpl
         ) {
             moviesRemoteDataSource.addCategoryToFirebaseDB(username, categoryName, category)
         }
+
+        override suspend fun deleteCategory(
+            username: String,
+            categoryName: String,
+        ) {
+            moviesRemoteDataSource.deleteCategory(username, categoryName)
+        }
     }

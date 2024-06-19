@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,8 +28,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,12 +54,29 @@ fun HomeScreen(
     onSearchUsersClick: () -> Unit,
     getUserCategories: () -> Unit,
     deleteCategory: (FbCategoryModel) -> Unit,
+    deleteCategoryState: Result<Unit>?,
+    resetDeleteCategoryState: () -> Unit,
 ) {
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(Unit) {
         getUserCategories()
+    }
+
+    LaunchedEffect(deleteCategoryState) {
+        deleteCategoryState?.let {
+            if (it.isSuccess) {
+                Toast.makeText(context, "Category deleted successfully", Toast.LENGTH_SHORT).show()
+                resetDeleteCategoryState()
+                getUserCategories()
+            } else if (it.isFailure) {
+                Toast
+                    .makeText(context, "Failed to Delete, Try Again Later!", Toast.LENGTH_SHORT)
+                    .show()
+                resetDeleteCategoryState()
+            }
+        }
     }
 
     Scaffold(
@@ -97,10 +111,10 @@ fun HomeScreen(
         content = { padding ->
             Box(
                 modifier =
-                    Modifier
-                        .background(color = colorResource(id = R.color.white))
-                        .padding(horizontal = 16.dp)
-                        .fillMaxSize(),
+                Modifier
+                    .background(color = colorResource(id = R.color.white))
+                    .padding(horizontal = 16.dp)
+                    .fillMaxSize(),
             ) {
                 if (!authState.isAuthenticated) {
                     onLogoutSuccess()
@@ -109,9 +123,9 @@ fun HomeScreen(
                 if (!homeScreenState.userCategories.isNullOrEmpty()) {
                     Column(
                         modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .align(Alignment.TopCenter),
+                        Modifier
+                            .fillMaxSize()
+                            .align(Alignment.TopCenter),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         HomeButtonSection(
@@ -140,9 +154,9 @@ fun HomeScreen(
                 } else {
                     Column(
                         modifier =
-                            Modifier
-                                .padding(16.dp)
-                                .align(Alignment.TopCenter),
+                        Modifier
+                            .padding(16.dp)
+                            .align(Alignment.TopCenter),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         HomeButtonSection(
@@ -194,9 +208,9 @@ private fun HomeButtonSection(
 
         Button(
             modifier =
-                Modifier
-                    .padding(start = 16.dp)
-                    .wrapContentSize(),
+            Modifier
+                .padding(start = 16.dp)
+                .wrapContentSize(),
             shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
@@ -221,9 +235,9 @@ private fun CategoryList(
     LazyColumn(
         state = listState,
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+        Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
     ) {
         items(categories) { category ->
             CategoryItem(
@@ -290,6 +304,8 @@ private fun HomeScreenPreview() {
             onSearchUsersClick = {},
             getUserCategories = {},
             deleteCategory = {},
+            deleteCategoryState = null,
+            resetDeleteCategoryState = {},
         )
     }
 }
@@ -307,6 +323,8 @@ private fun HomeScreenEmptyPreview() {
             onSearchUsersClick = {},
             getUserCategories = {},
             deleteCategory = {},
+            deleteCategoryState = null,
+            resetDeleteCategoryState = {},
         )
     }
 }

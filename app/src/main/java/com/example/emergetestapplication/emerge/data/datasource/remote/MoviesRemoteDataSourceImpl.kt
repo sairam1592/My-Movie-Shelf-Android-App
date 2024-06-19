@@ -4,6 +4,7 @@ import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryMo
 import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
 import com.example.emergetestapplication.emerge.data.model.movies.MovieResponse
 import com.example.emergetestapplication.emerge.data.network.APIService
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.Dispatchers
@@ -21,11 +22,18 @@ class MoviesRemoteDataSourceImpl
         private val apiService: APIService,
         private val fireStore: FirebaseFirestore,
     ) : MoviesRemoteDataSource {
-        override fun searchMovies(query: String): Flow<Result<MovieResponse>> =
+
+    /**
+     * This method is used to search the movies based on the Movie Title.
+     */
+    override fun searchMovies(query: String): Flow<Result<MovieResponse>> =
             flow {
                 emit(Result.success(apiService.searchMovies(query)))
             }.flowOn(Dispatchers.IO)
 
+    /**
+     * This method is used to get the user categories from the Firebase Firestore Database Collection.
+     */
         override suspend fun getUserCategories(username: String): List<FbCategoryModel>? =
             suspendCoroutine { continuation ->
                 fireStore
@@ -58,6 +66,9 @@ class MoviesRemoteDataSourceImpl
                     }
             }
 
+    /**
+     * This method is used to add the a new Category with 5 movies to the Firebase Firestore Database Collection.
+     */
         override suspend fun addCategoryToFirebaseDB(
             username: String,
             categoryName: String,
@@ -90,4 +101,22 @@ class MoviesRemoteDataSourceImpl
                     continuation.resumeWithException(exception)
                 }
         }
+
+    /**
+     * This method is used to delete the category from the Firebase Firestore.
+     */
+        override suspend fun deleteCategory(
+            username: String,
+            categoryName: String,
+        ) = suspendCoroutine { continuation ->
+            fireStore
+                .collection("users")
+                .document(username)
+                .update(categoryName, FieldValue.delete())
+                .addOnSuccessListener {
+                    continuation.resume(Unit)
+                }.addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+            }
+    }
     }

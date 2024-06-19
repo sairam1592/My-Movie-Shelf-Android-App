@@ -46,8 +46,10 @@ fun StartUpScreen(
             modifier = Modifier.padding(top = 10.dp),
             text = "- Curate multiple Favourite List and Add Top 5 Movies to it.\n" +
                     "- Search your favourite movie and add it to your list.\n" +
-                    "- Don't have an account? Signup now to get started.\n" +
-                    "- Already have an account? Login now to access your list.\n",
+                "- Delete the list and start over if you wish.\n" +
+                "- Seach and view other's favourite list too.\n\n" +
+                "** Don't have an account? Signup now to get started.\n" +
+                "** Already have an account? Login now to access your list.",
             color = Color.DarkGray,
             fontSize = 14.sp,
             lineHeight = 25.sp,
@@ -57,7 +59,7 @@ fun StartUpScreen(
             onClick = onNavigateToLogin,
             modifier =
             Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 10.dp)
+                .padding(top = 10.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
                     .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors =

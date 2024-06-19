@@ -14,6 +14,7 @@ import com.example.emergetestapplication.emerge.data.repository.authentication.A
 import com.example.emergetestapplication.emerge.data.repository.movies.MovieRepository
 import com.example.emergetestapplication.emerge.data.repository.movies.MovieRepositoryImpl
 import com.example.emergetestapplication.emerge.domain.usecase.AddCategoryToFireBaseDBUseCase
+import com.example.emergetestapplication.emerge.domain.usecase.DeleteCategoryUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.GetUserCategoriesUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -72,4 +73,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAddCategoryUseCase(repository: MovieRepository): AddCategoryToFireBaseDBUseCase = AddCategoryToFireBaseDBUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteCategoryUseCase(repository: MovieRepository): DeleteCategoryUseCase = DeleteCategoryUseCase(repository)
 }

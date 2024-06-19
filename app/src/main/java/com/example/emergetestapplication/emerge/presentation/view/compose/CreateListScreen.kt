@@ -137,11 +137,12 @@ fun CreateListScreen(
                 resetAddCategoryState()
             } else if (it.isFailure) {
                 resetAddCategoryState()
-                Toast.makeText(context, "Failed to save the list.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to save the list, Try Again Later!", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    // On Back press, dont hold onto any state values, clear everything
     BackHandler {
         navController.popBackStack()
         setTitle("")
