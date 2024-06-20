@@ -31,6 +31,7 @@ Senior Android Test Project for Emerge, Auckland
 5. Firebase Firestore: For storing user lists and movies.
 6. Hilt: For Dependency Injection.
 7. Kotlin Coroutines & Flow: For asynchronous programming.
+8. MVVM Clean Architecture with Usecase Approach
 
 # ScreenShots
 
@@ -77,6 +78,7 @@ https://github.com/sairam1592/Emerge-Android-Test/assets/14980927/f84b7ec1-e91a-
 **Firebase Firestore Integration**
 1. Stores the user's favorite movie categories and movies.
 2. Supports adding, viewing, and deleting categories.
+3. Support adding, viewing and deleting movie items to a category.
 
 **Search Functionality**
 1. Implemented debounce search to fetch movies based on keywords from TMDB.
