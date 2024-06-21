@@ -57,7 +57,7 @@ fun MyNewListItem(
             modifier = Modifier.padding(16.dp),
         ) {
             Text(
-                text = "$emoji  $title",
+                text = "$emoji  ${title.uppercase()}",
                 color = Color.White,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium,
@@ -120,7 +120,7 @@ fun MyNewListItem(
                         ButtonDefaults.buttonColors(
                             backgroundColor = Color.White,
                             contentColor = colorResource(id = R.color.teal_700),
-                    ),
+                        ),
                     enabled = selectedMovies.size < 5,
                 ) {
                     Icon(

@@ -96,7 +96,7 @@ fun CategoryItem(
             title = {
                 Text(
                     color = colorResource(id = R.color.teal_700),
-                    text = category.title,
+                    text = category.title.uppercase(),
                     style = MaterialTheme.typography.h6,
                 )
             },
@@ -204,7 +204,7 @@ fun CategoryItem(
             modifier = Modifier.padding(12.dp),
         ) {
             Text(
-                text = "${category.emoji} ${category.title}",
+                text = "${category.emoji} ${category.title.uppercase()}",
                 color = Color.White,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
