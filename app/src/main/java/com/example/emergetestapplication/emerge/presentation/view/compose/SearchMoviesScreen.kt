@@ -83,6 +83,8 @@ fun SearchMoviesScreen(
                         delay(500)
                         if (query.text.isNotEmpty()) {
                             searchMovies(query.text)
+                        } else {
+                            clearMoviesSearch()
                         }
                     }
             },
