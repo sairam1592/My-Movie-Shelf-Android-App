@@ -54,7 +54,7 @@ fun HomeScreen(
     deleteCategory: (FbCategoryModel) -> Unit,
     deleteCategoryState: Result<Unit>?,
     resetDeleteCategoryState: () -> Unit,
-    onModifyCategory: (FbCategoryModel, List<Int>) -> Unit,
+    onModifyCategory: (FbCategoryModel) -> Unit,
     modifyCategoryState: Result<Unit>?,
     resetModifyCategoryState: () -> Unit,
 ) {
@@ -171,7 +171,7 @@ fun HomeScreen(
                             onDeleteCategory = deleteCategory,
                             onModifyCategory = onModifyCategory,
                             isDeleteCategoryEnabled = true,
-                            isShowModifyButton = true,
+                            isShowModifyButton = true
                         )
                     }
                 } else {
@@ -306,9 +306,9 @@ private fun HomeScreenPreview() {
             deleteCategory = {},
             deleteCategoryState = null,
             resetDeleteCategoryState = {},
-            onModifyCategory = { _, _ -> },
+            onModifyCategory = { _ -> },
             modifyCategoryState = null,
-            resetModifyCategoryState = {},
+            resetModifyCategoryState = {}
         )
     }
 }
@@ -328,9 +328,9 @@ private fun HomeScreenEmptyPreview() {
             deleteCategory = {},
             deleteCategoryState = null,
             resetDeleteCategoryState = {},
-            onModifyCategory = { _, _ -> },
+            onModifyCategory = { _ -> },
             modifyCategoryState = null,
-            resetModifyCategoryState = {},
+            resetModifyCategoryState = {}
         )
     }
 }

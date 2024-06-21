@@ -17,9 +17,9 @@ import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 fun CategoryList(
     categories: List<FbCategoryModel>,
     onDeleteCategory: (FbCategoryModel) -> Unit,
-    onModifyCategory: (FbCategoryModel, List<Int>) -> Unit,
+    onModifyCategory: (FbCategoryModel) -> Unit,
     isDeleteCategoryEnabled: Boolean,
-    isShowModifyButton: Boolean,
+    isShowModifyButton: Boolean
 ) {
     val listState = rememberLazyListState()
 
@@ -36,7 +36,7 @@ fun CategoryList(
                 onDeleteCategory = onDeleteCategory,
                 onModifyCategory = onModifyCategory,
                 isDeleteCategoryEnabled = isDeleteCategoryEnabled,
-                isShowModifyButton = isShowModifyButton,
+                isShowModifyButton = isShowModifyButton
             )
         }
     }
@@ -48,7 +48,7 @@ private fun CategoryListPreview() {
     EmergeTestApplicationTheme {
         CategoryList(
             onDeleteCategory = {},
-            onModifyCategory = { _, _ -> },
+            onModifyCategory = { _-> },
             isDeleteCategoryEnabled = true,
             isShowModifyButton = true,
             categories =

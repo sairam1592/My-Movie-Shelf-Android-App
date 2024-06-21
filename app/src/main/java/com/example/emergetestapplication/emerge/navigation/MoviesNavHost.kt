@@ -7,12 +7,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.data.model.movies.Movie
 import com.example.emergetestapplication.emerge.domain.mapper.MovieMappers.toFbMovieModel
+import com.example.emergetestapplication.emerge.domain.mapper.MovieMappers.toMovie
 import com.example.emergetestapplication.emerge.presentation.view.compose.CreateListScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.HomeScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.LoginScreen
@@ -34,7 +37,12 @@ sealed class Screen(
 
     object Home : Screen("home")
 
-    object CreateList : Screen("create_list")
+    object CreateList : Screen("create_list") {
+        fun createRoute(
+            title: String,
+            emoji: String,
+        ): String = "create_list?title=$title&emoji=$emoji"
+    }
 
     object SearchMovie : Screen("search_movie")
 
@@ -109,7 +117,14 @@ fun MoviesNavHost(
                         popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 },
-                onCreateListClick = { navController.navigate(Screen.CreateList.route) },
+                onCreateListClick = {
+                    navController.navigate(
+                        Screen.CreateList.createRoute(
+                            "",
+                            "",
+                        ),
+                    )
+                },
                 onSearchUsersClick = { navController.navigate(Screen.SearchUser.route) },
                 getUserCategories = {
                     authState.user?.let { moviesViewModel.getUserCategories(it.username) }
@@ -119,11 +134,13 @@ fun MoviesNavHost(
                 },
                 deleteCategoryState = deleteCategoryState,
                 resetDeleteCategoryState = { moviesViewModel.resetDeleteCategoryState() },
-                onModifyCategory = { category, movieIds ->
-                    moviesViewModel.removeMoviesFromCategory(
-                        authState.user?.username ?: "",
-                        category.title,
-                        movieIds,
+                onModifyCategory = { category ->
+                    selectedMovies = category.movies.map { it.toMovie() }
+                    navController.navigate(
+                        Screen.CreateList.createRoute(
+                            category.title,
+                            category.emoji,
+                        ),
                     )
                 },
                 modifyCategoryState = modifyCategoryState,
@@ -131,14 +148,26 @@ fun MoviesNavHost(
             )
         }
 
-        composable(Screen.CreateList.route) {
+        composable(
+            route = "${Screen.CreateList.route}?title={title}&emoji={emoji}",
+            arguments =
+                listOf(
+                    navArgument("title") { type = NavType.StringType },
+                    navArgument("emoji") { type = NavType.StringType },
+                ),
+        ) { backStackEntry ->
+
+            val title = backStackEntry.arguments?.getString("title") ?: ""
+            val emoji = backStackEntry.arguments?.getString("emoji") ?: ""
+
             val authState by authViewModel.authState.collectAsStateWithLifecycle()
             val addCategoryState by moviesViewModel.addCategoryState.collectAsStateWithLifecycle()
 
             CreateListScreen(
-                title = moviesViewModel.title.collectAsStateWithLifecycle().value,
+                isModify = title.isNotEmpty(),
+                title = title.ifEmpty { moviesViewModel.title.collectAsStateWithLifecycle().value },
                 setTitle = { moviesViewModel.setTitle(it) },
-                emoji = moviesViewModel.emoji.collectAsStateWithLifecycle().value,
+                emoji = emoji.ifEmpty { moviesViewModel.emoji.collectAsStateWithLifecycle().value },
                 setEmoji = { moviesViewModel.setEmoji(it) },
                 onAddMoviesClick = { navController.navigate(Screen.SearchMovie.route) },
                 onSaveListClick = { title, emoji, movies ->

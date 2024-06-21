@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,6 +42,7 @@ import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
 @Composable
 fun CreateListScreen(
+    isModify: Boolean,
     title: String,
     setTitle: (String) -> Unit,
     emoji: String,
@@ -55,17 +58,18 @@ fun CreateListScreen(
 ) {
     val context = LocalContext.current
     var isListCreated by remember { mutableStateOf(false) }
+    var showConfirmDialog by remember { mutableStateOf(false) }
 
     Column(
         modifier =
-            Modifier
-                .background(color = colorResource(id = R.color.white))
-                .padding(16.dp),
+        Modifier
+            .background(color = colorResource(id = R.color.white))
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
     ) {
         Text(
-            text = stringResource(id = R.string.create_a_list),
+            text = stringResource(id = if (isModify) R.string.modify_your_list else R.string.create_a_list),
             style = MaterialTheme.typography.h6,
             fontSize = 24.sp,
         )
@@ -118,10 +122,11 @@ fun CreateListScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = emoji.isNotEmpty() && title.isNotEmpty(),
             ) {
-                Text(text = stringResource(id = R.string.create_list))
+                Text(text = stringResource(id = if (isModify) R.string.modify else R.string.create_list))
             }
         } else {
             MyNewListItem(
+                isModify = isModify,
                 emoji = emoji,
                 title = title,
                 onAddMoviesClick = onAddMoviesClick,
@@ -152,10 +157,52 @@ fun CreateListScreen(
 
     // On Back press, dont hold onto any state values, clear everything
     BackHandler {
-        navController.popBackStack()
-        setTitle("")
-        setEmoji("")
-        resetSelectedMovies()
+        if (isModify) {
+            showConfirmDialog = true
+        } else {
+            navController.popBackStack()
+            setTitle("")
+            setEmoji("")
+            resetSelectedMovies()
+        }
+    }
+
+    if (showConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = { showConfirmDialog = false },
+            title = { Text(stringResource(id = R.string.unsaved_changes_title)) },
+            text = { Text(stringResource(id = R.string.unsaved_changes_message)) },
+            confirmButton = {
+                TextButton(
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            backgroundColor = colorResource(id = R.color.teal_700),
+                            contentColor = Color.White,
+                        ),
+                    onClick = {
+                        showConfirmDialog = false
+                        navController.popBackStack()
+                        setTitle("")
+                        setEmoji("")
+                        resetSelectedMovies()
+                    },
+                ) {
+                    Text(stringResource(id = R.string.go_back))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            backgroundColor = colorResource(id = R.color.teal_700),
+                            contentColor = Color.White,
+                        ),
+                    onClick = { showConfirmDialog = false },
+                ) {
+                    Text(stringResource(id = R.string.stay))
+                }
+            },
+        )
     }
 }
 
@@ -164,6 +211,7 @@ fun CreateListScreen(
 private fun CreateListScreenPreview() {
     EmergeTestApplicationTheme {
         CreateListScreen(
+            isModify = false,
             title = "",
             setTitle = {},
             emoji = "",
@@ -184,12 +232,13 @@ private fun CreateListScreenPreview() {
 private fun MyNewListItemEmptyPreview() {
     EmergeTestApplicationTheme {
         MyNewListItem(
+            isModify = false,
             emoji = "",
             title = "My Favourite western movies",
             onAddMoviesClick = {},
             onSaveListClick = {},
             selectedMovies = emptyList(),
-            removeMovie = {}
+            removeMovie = {},
         )
     }
 }

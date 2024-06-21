@@ -5,7 +5,12 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="modify">Modify</string>
+    <string name="go_back">Go Back</string>
+    <string name="stay">Stay</string>
+    <string name="unsaved_changes_title">You have some unsaved changes?</string>
+    <string name="unsaved_changes_message">Are you sure, you want to go back without Saving? </string>
     <string name="create_a_list">Create A List</string>
+    <string name="modify_your_list">Modify Your List</string>
     <string name="hint_list_title">Enter Title</string>
     <string name="hint_list_emoji">Choose an Emoji</string>
     <string name="create_list">Create List</string>

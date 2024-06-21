@@ -36,6 +36,7 @@ import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
 @Composable
 fun MyNewListItem(
+    isModify: Boolean,
     emoji: String,
     title: String,
     onAddMoviesClick: () -> Unit,
@@ -49,9 +50,9 @@ fun MyNewListItem(
         shape = RoundedCornerShape(16.dp),
         backgroundColor = colorResource(id = R.color.teal_700),
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
+        Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -63,10 +64,10 @@ fun MyNewListItem(
                 fontWeight = FontWeight.Medium,
                 maxLines = 2,
                 modifier =
-                    Modifier
-                        .border(1.dp, Color.White, RoundedCornerShape(8.dp))
-                        .padding(horizontal = 15.dp, vertical = 10.dp)
-                        .align(Alignment.CenterHorizontally),
+                Modifier
+                    .border(1.dp, Color.White, RoundedCornerShape(8.dp))
+                    .padding(horizontal = 15.dp, vertical = 10.dp)
+                    .align(Alignment.CenterHorizontally),
             )
 
             if (selectedMovies.isNotEmpty()) {
@@ -75,9 +76,9 @@ fun MyNewListItem(
                 selectedMovies.let { movies ->
                     LazyColumn(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .heightIn(max = 400.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 400.dp),
                     ) {
                         items(movies) { movie ->
                             SearchResultItem(showDeleteIcon = true, movie = movie, onClick = {}, removeMovie = removeMovie)
@@ -87,14 +88,14 @@ fun MyNewListItem(
 
                 if (remainingMovies > 0) {
                     Text(
-                        text = "Add $remainingMovies more ${if (remainingMovies == 1) "movie" else "movies"} to save this list...",
+                        text = "Add $remainingMovies more ${if (remainingMovies == 1) "movie" else "movies"} to save the ${if (isModify) "modified" else ""} list...",
                         color = Color.White,
                         fontSize = 14.sp,
                         maxLines = 2,
                         modifier =
-                            Modifier
-                                .padding(top = 12.dp)
-                                .align(Alignment.CenterHorizontally),
+                        Modifier
+                            .padding(top = 12.dp)
+                            .align(Alignment.CenterHorizontally),
                     )
                 }
             } else {
@@ -104,9 +105,9 @@ fun MyNewListItem(
                     fontSize = 14.sp,
                     maxLines = 2,
                     modifier =
-                        Modifier
-                            .padding(top = 18.dp)
-                            .align(Alignment.CenterHorizontally),
+                    Modifier
+                        .padding(top = 18.dp)
+                        .align(Alignment.CenterHorizontally),
                 )
             }
 
@@ -177,6 +178,7 @@ private fun MyNewListItemWithMovieInfoPreview() {
 
     EmergeTestApplicationTheme {
         MyNewListItem(
+            isModify = true,
             emoji = "",
             title = "My Favourite western movies",
             onAddMoviesClick = {},

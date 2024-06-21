@@ -63,9 +63,9 @@ fun SearchUsersScreen(
 
     Column(
         modifier =
-        Modifier
-            .background(color = colorResource(id = R.color.white))
-            .fillMaxSize()
+            Modifier
+                .background(color = colorResource(id = R.color.white))
+                .fillMaxSize()
                 .padding(horizontal = 16.dp),
     ) {
         OutlinedTextField(
@@ -102,10 +102,10 @@ fun SearchUsersScreen(
             searchUserScreenState.isLoading -> {
                 CircularProgressIndicator(
                     modifier =
-                    Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .size(24.dp)
-                        .align(Alignment.CenterHorizontally),
+                        Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .size(24.dp)
+                            .align(Alignment.CenterHorizontally),
                     color = colorResource(id = R.color.teal_700),
                 )
             }
@@ -148,7 +148,7 @@ fun SearchUsersScreen(
                         onDeleteCategory = { /*Do nothing*/ },
                         isDeleteCategoryEnabled = false,
                         isShowModifyButton = false,
-                        onModifyCategory = { _, _ -> /*Do nothing*/ },
+                        onModifyCategory = { _ -> },
                     )
                 } else {
                     Column(

@@ -22,6 +22,16 @@ object MovieMappers {
             posterPath = movie.poster_path,
         )
 
+    fun FbMovieModel.toMovie(): Movie =
+        Movie(
+            id = this.id,
+            title = this.title,
+            overview = this.overview,
+            poster_path = this.posterPath,
+            release_date = "",
+            vote_average = 0.0,
+        )
+
     fun fromFbModelList(fbMovieModels: List<FbMovieModel>): List<Movie> = fbMovieModels.map { fromFbMovieModel(it) }
 
     fun toFbModelList(movies: List<Movie>): List<FbMovieModel> = movies.map { toFbMovieModel(it) }

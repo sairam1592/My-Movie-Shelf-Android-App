@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,8 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -46,13 +43,11 @@ import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 fun CategoryItem(
     category: FbCategoryModel,
     onDeleteCategory: (FbCategoryModel) -> Unit,
-    onModifyCategory: (FbCategoryModel, List<Int>) -> Unit,
+    onModifyCategory: (FbCategoryModel) -> Unit,
     isDeleteCategoryEnabled: Boolean,
     isShowModifyButton: Boolean,
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    var showModifyDialog by remember { mutableStateOf(false) }
-    var selectedMovies by remember { mutableStateOf(setOf<Int>()) }
 
     if (showDialog) {
         AlertDialog(
@@ -89,99 +84,6 @@ fun CategoryItem(
         )
     }
 
-    if (showModifyDialog) {
-        AlertDialog(
-            shape = RoundedCornerShape(16.dp),
-            onDismissRequest = { showModifyDialog = false },
-            title = {
-                Text(
-                    color = colorResource(id = R.color.teal_700),
-                    text = category.title.uppercase(),
-                    style = MaterialTheme.typography.h6,
-                )
-            },
-            text = {
-                Column {
-                    Text(
-                        style = MaterialTheme.typography.body1,
-                        fontWeight = FontWeight.Medium,
-                        text = stringResource(id = R.string.select_movies_to_modify),
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    LazyColumn {
-                        items(category.movies) { movie ->
-                            Row(
-                                modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 2.dp)
-                                        .clickable {
-                                            selectedMovies =
-                                                if (selectedMovies.contains(movie.id)) {
-                                                    selectedMovies - movie.id
-                                                } else {
-                                                    selectedMovies + movie.id
-                                                }
-                                        },
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Checkbox(
-                                    checked = selectedMovies.contains(movie.id),
-                                    onCheckedChange = {
-                                        selectedMovies =
-                                            if (it) {
-                                                selectedMovies + movie.id
-                                            } else {
-                                                selectedMovies - movie.id
-                                            }
-                                    },
-                                )
-                                Text(
-                                    style = MaterialTheme.typography.body2,
-                                    text = movie.title,
-                                    modifier = Modifier.padding(start = 4.dp),
-                                )
-                            }
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        style = MaterialTheme.typography.body1,
-                        fontWeight = FontWeight.Medium,
-                        text = stringResource(id = R.string.modify_cta_desc),
-                    )
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    colors =
-                        ButtonDefaults.buttonColors(
-                            backgroundColor = colorResource(id = R.color.teal_700),
-                            contentColor = Color.White,
-                        ),
-                    onClick = {
-                        onModifyCategory(category, selectedMovies.toList())
-                        showModifyDialog = false
-                    },
-                ) {
-                    Text(stringResource(id = R.string.modify))
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    colors =
-                        ButtonDefaults.buttonColors(
-                            backgroundColor = colorResource(id = R.color.teal_700),
-                            contentColor = Color.White,
-                        ),
-                    onClick = { showModifyDialog = false },
-                ) {
-                    Text(stringResource(id = R.string.cancel))
-                }
-            },
-        )
-    }
-
     Card(
         shape = RoundedCornerShape(16.dp),
         backgroundColor = colorResource(id = R.color.teal_700),
@@ -189,7 +91,7 @@ fun CategoryItem(
             Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
-                .clickable { showModifyDialog = true }
+                .clickable { showDialog = true }
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onLongPress = {
@@ -243,7 +145,7 @@ fun CategoryItem(
                                 contentColor = colorResource(id = R.color.white),
                             ),
                         onClick = {
-                            showModifyDialog = true
+                            onModifyCategory(category)
                         },
                     ) {
                         Text(
@@ -265,7 +167,7 @@ private fun CategoryItemPreview() {
             isDeleteCategoryEnabled = true,
             isShowModifyButton = true,
             onDeleteCategory = {},
-            onModifyCategory = { _, _ -> },
+            onModifyCategory = { _ -> },
             category =
                 FbCategoryModel(
                     title = "Category 1",
