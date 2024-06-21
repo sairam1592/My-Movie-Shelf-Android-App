@@ -12,7 +12,7 @@ import androidx.navigation.compose.composable
 import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.data.model.movies.Movie
-import com.example.emergetestapplication.emerge.domain.mapper.MovieMapper.toFbMovieModelModel
+import com.example.emergetestapplication.emerge.domain.mapper.MovieMappers.toFbMovieModel
 import com.example.emergetestapplication.emerge.presentation.view.compose.CreateListScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.HomeScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.LoginScreen
@@ -47,15 +47,6 @@ fun MoviesNavHost(
     authViewModel: AuthViewModel,
     moviesViewModel: MoviesViewModel,
 ) {
-    val errorEventState by authViewModel.errorEvent.collectAsStateWithLifecycle()
-    val authState by authViewModel.authState.collectAsStateWithLifecycle()
-    val moviesState by moviesViewModel.moviesState.collectAsStateWithLifecycle()
-    val homeScreenState by moviesViewModel.homeScreenState.collectAsStateWithLifecycle()
-    val searchUserScreenState by moviesViewModel.searchUserScreenState.collectAsStateWithLifecycle()
-    val addCategoryState by moviesViewModel.addCategoryState.collectAsStateWithLifecycle()
-    val deleteCategoryState by moviesViewModel.deleteCategoryState.collectAsStateWithLifecycle()
-    val modifyCategoryState by moviesViewModel.modifyCategoryState.collectAsStateWithLifecycle()
-
     var selectedMovies by remember { mutableStateOf<List<Movie>>(emptyList()) }
 
     NavHost(navController = navController, startDestination = Screen.Startup.route) {
@@ -67,15 +58,12 @@ fun MoviesNavHost(
         }
 
         composable(Screen.Signup.route) {
+            val authState by authViewModel.authState.collectAsStateWithLifecycle()
+
             SignUpScreen(
                 authState = authState,
                 onSignUp = { username, password, onAccountExists, onSignUpSuccess ->
-                    authViewModel.signUp(
-                        username,
-                        password,
-                        onAccountExists,
-                        onSignUpSuccess,
-                    )
+                    authViewModel.signUp(username, password, onAccountExists, onSignUpSuccess)
                 },
                 onSignUpSuccess = {
                     navController.navigate(Screen.Home.route) {
@@ -91,6 +79,9 @@ fun MoviesNavHost(
         }
 
         composable(Screen.Login.route) {
+            val authState by authViewModel.authState.collectAsStateWithLifecycle()
+            val errorEventState by authViewModel.errorEvent.collectAsStateWithLifecycle()
+
             LoginScreen(
                 authState = authState,
                 errorEvent = errorEventState,
@@ -104,6 +95,11 @@ fun MoviesNavHost(
         }
 
         composable(Screen.Home.route) {
+            val authState by authViewModel.authState.collectAsStateWithLifecycle()
+            val homeScreenState by moviesViewModel.homeScreenState.collectAsStateWithLifecycle()
+            val deleteCategoryState by moviesViewModel.deleteCategoryState.collectAsStateWithLifecycle()
+            val modifyCategoryState by moviesViewModel.modifyCategoryState.collectAsStateWithLifecycle()
+
             HomeScreen(
                 authState = authState,
                 homeScreenState = homeScreenState,
@@ -114,21 +110,12 @@ fun MoviesNavHost(
                     }
                 },
                 onCreateListClick = { navController.navigate(Screen.CreateList.route) },
-                onSearchUsersClick = {
-                    navController.navigate(Screen.SearchUser.route)
-                },
+                onSearchUsersClick = { navController.navigate(Screen.SearchUser.route) },
                 getUserCategories = {
-                    authState.user?.let { it1 ->
-                        moviesViewModel.getUserCategories(
-                            it1.username,
-                        )
-                    }
+                    authState.user?.let { moviesViewModel.getUserCategories(it.username) }
                 },
                 deleteCategory = { category ->
-                    moviesViewModel.deleteCategory(
-                        authState.user?.username ?: "",
-                        category.title,
-                    )
+                    moviesViewModel.deleteCategory(authState.user?.username ?: "", category.title)
                 },
                 deleteCategoryState = deleteCategoryState,
                 resetDeleteCategoryState = { moviesViewModel.resetDeleteCategoryState() },
@@ -145,6 +132,9 @@ fun MoviesNavHost(
         }
 
         composable(Screen.CreateList.route) {
+            val authState by authViewModel.authState.collectAsStateWithLifecycle()
+            val addCategoryState by moviesViewModel.addCategoryState.collectAsStateWithLifecycle()
+
             CreateListScreen(
                 title = moviesViewModel.title.collectAsStateWithLifecycle().value,
                 setTitle = { moviesViewModel.setTitle(it) },
@@ -152,18 +142,11 @@ fun MoviesNavHost(
                 setEmoji = { moviesViewModel.setEmoji(it) },
                 onAddMoviesClick = { navController.navigate(Screen.SearchMovie.route) },
                 onSaveListClick = { title, emoji, movies ->
-                    val fbMovies =
-                        movies.map { movie ->
-                            toFbMovieModelModel(movie)
-                        }
-                    val category =
-                        FbCategoryModel(
-                            emoji = emoji,
-                            movies = fbMovies,
-                        )
-                    authState.user?.username?.let { it1 ->
+                    val fbMovies = movies.map { toFbMovieModel(it) }
+                    val category = FbCategoryModel(emoji = emoji, movies = fbMovies)
+                    authState.user?.username?.let {
                         moviesViewModel.addCategoryToFirebaseDB(
-                            it1,
+                            it,
                             title,
                             category,
                         )
@@ -179,6 +162,8 @@ fun MoviesNavHost(
         }
 
         composable(Screen.SearchMovie.route) {
+            val moviesState by moviesViewModel.moviesState.collectAsStateWithLifecycle()
+
             SearchMoviesScreen(
                 moviesState = moviesState,
                 searchMovies = { query -> moviesViewModel.searchMovies(query) },
@@ -191,6 +176,9 @@ fun MoviesNavHost(
         }
 
         composable(Screen.SearchUser.route) {
+            val authState by authViewModel.authState.collectAsStateWithLifecycle()
+            val searchUserScreenState by moviesViewModel.searchUserScreenState.collectAsStateWithLifecycle()
+
             SearchUsersScreen(
                 searchUserScreenState = searchUserScreenState,
                 searchUserCategories = { query ->

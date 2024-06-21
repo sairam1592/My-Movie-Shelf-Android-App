@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.example.emergetestapplication.R
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
-import com.example.emergetestapplication.emerge.domain.mapper.MovieMapper.fromFbModelList
+import com.example.emergetestapplication.emerge.domain.mapper.MovieMappers.fromFbModelList
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
 @Composable

@@ -152,7 +152,7 @@ class MoviesViewModel
         }
 
         fun resetModifyCategoryState() {
-            _deleteCategoryState.value = null
+            _modifyCategoryState.value = null
         }
 
         fun searchMovies(query: String) {

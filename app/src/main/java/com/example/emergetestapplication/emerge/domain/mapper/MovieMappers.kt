@@ -3,8 +3,8 @@ package com.example.emergetestapplication.emerge.domain.mapper
 import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
 import com.example.emergetestapplication.emerge.data.model.movies.Movie
 
-object MovieMapper {
-    fun fromFbMovieModel(fbMovieModel: FbMovieModel): Movie =
+object MovieMappers {
+    private fun fromFbMovieModel(fbMovieModel: FbMovieModel): Movie =
         Movie(
             id = fbMovieModel.id,
             title = fbMovieModel.title,
@@ -14,7 +14,7 @@ object MovieMapper {
             vote_average = 0.0,
         )
 
-    fun toFbMovieModelModel(movie: Movie): FbMovieModel =
+    fun toFbMovieModel(movie: Movie): FbMovieModel =
         FbMovieModel(
             id = movie.id,
             title = movie.title,
@@ -24,5 +24,5 @@ object MovieMapper {
 
     fun fromFbModelList(fbMovieModels: List<FbMovieModel>): List<Movie> = fbMovieModels.map { fromFbMovieModel(it) }
 
-    fun toFbModelList(movies: List<Movie>): List<FbMovieModel> = movies.map { toFbMovieModelModel(it) }
+    fun toFbModelList(movies: List<Movie>): List<FbMovieModel> = movies.map { toFbMovieModel(it) }
 }
