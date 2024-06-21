@@ -65,6 +65,12 @@ DELETE A LIST FROM UI AND FIREBASE DB
 https://github.com/sairam1592/Emerge-Android-Test/assets/14980927/f84b7ec1-e91a-4cfb-96d6-b6548742027f
 
 
+MODIFY YOUR LIST By ADDING, REMOVING Movies to it
+
+https://github.com/sairam1592/Emerge-Android-Test/assets/14980927/a4054407-6e85-4978-9bca-0832cce400db
+
+
+
 # Features and Implementation
 
 **User Authentication**
