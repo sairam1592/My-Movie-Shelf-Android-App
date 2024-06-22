@@ -16,10 +16,10 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -111,16 +111,23 @@ fun HomeScreen(
                     )
                 },
                 actions = {
-                    IconButton(onClick = {
-                        onLogout()
-                        Toast.makeText(context, AppConstants.TOAST_LOGOUT_SUCCESS, Toast.LENGTH_SHORT).show()
-                    }) {
+                    TextButton(
+                        modifier = Modifier.padding(end = 10.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        border = BorderStroke(.2.dp, Color.White),
+                        colors =
+                            ButtonDefaults.buttonColors(
+                                backgroundColor = colorResource(id = R.color.teal_700),
+                                contentColor = colorResource(id = R.color.white),
+                            ),
+                        onClick = {
+                            onLogout()
+                            Toast.makeText(context, AppConstants.TOAST_LOGOUT_SUCCESS, Toast.LENGTH_SHORT).show()
+                        },
+                    ) {
                         Text(
-                            style = MaterialTheme.typography.h6,
-                            modifier = Modifier.padding(end = 16.dp),
-                            text =
-                                stringResource(id = R.string.logout),
-                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 4.dp),
+                            text = stringResource(id = R.string.logout),
                         )
                     }
                 },
@@ -171,7 +178,7 @@ fun HomeScreen(
                             onDeleteCategory = deleteCategory,
                             onModifyCategory = onModifyCategory,
                             isDeleteCategoryEnabled = true,
-                            isShowModifyButton = true
+                            isShowModifyButton = true,
                         )
                     }
                 } else {
@@ -308,7 +315,7 @@ private fun HomeScreenPreview() {
             resetDeleteCategoryState = {},
             onModifyCategory = { _ -> },
             modifyCategoryState = null,
-            resetModifyCategoryState = {}
+            resetModifyCategoryState = {},
         )
     }
 }
@@ -330,7 +337,7 @@ private fun HomeScreenEmptyPreview() {
             resetDeleteCategoryState = {},
             onModifyCategory = { _ -> },
             modifyCategoryState = null,
-            resetModifyCategoryState = {}
+            resetModifyCategoryState = {},
         )
     }
 }
