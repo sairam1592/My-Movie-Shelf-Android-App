@@ -16,14 +16,24 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,9 +67,11 @@ fun HomeScreen(
     onModifyCategory: (FbCategoryModel) -> Unit,
     modifyCategoryState: Result<Unit>?,
     resetModifyCategoryState: () -> Unit,
+    onAboutClick: () -> Unit,
 ) {
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
+    var showMenu by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         getUserCategories()
@@ -111,24 +123,47 @@ fun HomeScreen(
                     )
                 },
                 actions = {
-                    TextButton(
-                        modifier = Modifier.padding(end = 10.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        border = BorderStroke(.2.dp, Color.White),
-                        colors =
-                            ButtonDefaults.buttonColors(
-                                backgroundColor = colorResource(id = R.color.teal_700),
+                    Row (modifier = Modifier.wrapContentSize()) {
+                        TextButton(
+                            modifier = Modifier.padding(end = 10.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            border = BorderStroke(.2.dp, Color.White),
+                            colors =
+                                ButtonDefaults.buttonColors(
+                                    backgroundColor = colorResource(id = R.color.teal_700),
                                 contentColor = colorResource(id = R.color.white),
                             ),
-                        onClick = {
-                            onLogout()
-                            Toast.makeText(context, AppConstants.TOAST_LOGOUT_SUCCESS, Toast.LENGTH_SHORT).show()
-                        },
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(horizontal = 4.dp),
-                            text = stringResource(id = R.string.logout),
-                        )
+                            onClick = {
+                                onLogout()
+                                Toast
+                                    .makeText(
+                                        context,
+                                        AppConstants.TOAST_LOGOUT_SUCCESS,
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
+                            },
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(horizontal = 4.dp),
+                                text = stringResource(id = R.string.logout),
+                            )
+                        }
+
+                        IconButton(onClick = { showMenu = !showMenu }) {
+                            Icon(Icons.Filled.MoreVert, contentDescription = "More")
+                        }
+
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false },
+                        ) {
+                            DropdownMenuItem(onClick = {
+                                onAboutClick()
+                                showMenu = false
+                            }) {
+                                Text(text = "About App")
+                            }
+                        }
                     }
                 },
                 backgroundColor = colorResource(id = R.color.teal_700),
@@ -240,7 +275,7 @@ private fun HomeButtonSection(
             modifier =
                 Modifier
                     .padding(start = 16.dp)
-                    .wrapContentSize(),
+                .wrapContentSize(),
             shape = RoundedCornerShape(16.dp),
             colors =
                 ButtonDefaults.buttonColors(
@@ -316,6 +351,7 @@ private fun HomeScreenPreview() {
             onModifyCategory = { _ -> },
             modifyCategoryState = null,
             resetModifyCategoryState = {},
+            onAboutClick = {},
         )
     }
 }
@@ -338,6 +374,7 @@ private fun HomeScreenEmptyPreview() {
             onModifyCategory = { _ -> },
             modifyCategoryState = null,
             resetModifyCategoryState = {},
+            onAboutClick = {},
         )
     }
 }

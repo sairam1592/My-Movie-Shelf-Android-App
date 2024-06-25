@@ -16,6 +16,7 @@ import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryMo
 import com.example.emergetestapplication.emerge.data.model.movies.Movie
 import com.example.emergetestapplication.emerge.domain.mapper.MovieMappers.toFbMovieModel
 import com.example.emergetestapplication.emerge.domain.mapper.MovieMappers.toMovie
+import com.example.emergetestapplication.emerge.presentation.view.compose.AboutScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.CreateListScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.HomeScreen
 import com.example.emergetestapplication.emerge.presentation.view.compose.LoginScreen
@@ -47,6 +48,8 @@ sealed class Screen(
     object SearchMovie : Screen("search_movie")
 
     object SearchUser : Screen("search_user")
+
+    object About : Screen("about")
 }
 
 @Composable
@@ -58,6 +61,12 @@ fun MoviesNavHost(
     var selectedMovies by remember { mutableStateOf<List<Movie>>(emptyList()) }
 
     NavHost(navController = navController, startDestination = Screen.Startup.route) {
+        composable(Screen.About.route) {
+            AboutScreen(
+                navController = navController,
+            )
+        }
+
         composable(Screen.Startup.route) {
             StartUpScreen(
                 onNavigateToLogin = { navController.navigate(Screen.Login.route) },
@@ -145,6 +154,7 @@ fun MoviesNavHost(
                 },
                 modifyCategoryState = modifyCategoryState,
                 resetModifyCategoryState = { moviesViewModel.resetModifyCategoryState() },
+                onAboutClick = { navController.navigate(Screen.About.route) },
             )
         }
 
