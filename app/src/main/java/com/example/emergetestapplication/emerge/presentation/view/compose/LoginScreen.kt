@@ -7,13 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,53 +56,26 @@ fun LoginScreen(
             maxLines = 1,
         )
 
-        TextField(
-            modifier = Modifier.padding(top = 30.dp),
+        AuthTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text(stringResource(id = R.string.hint_username)) },
-            shape = RoundedCornerShape(4.dp),
-            colors =
-                TextFieldDefaults.textFieldColors(
-                    textColor = colorResource(id = R.color.black),
-                    focusedIndicatorColor = colorResource(id = R.color.teal_700),
-                    cursorColor = colorResource(id = R.color.teal_700),
-                    focusedLabelColor = colorResource(id = R.color.teal_700),
-                    unfocusedLabelColor = colorResource(id = R.color.teal_700),
-                ),
+            label = stringResource(id = R.string.hint_username),
+            modifier = Modifier.padding(top = 30.dp),
         )
-        TextField(
-            modifier = Modifier.padding(top = 25.dp),
+        AuthTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text(stringResource(id = R.string.hint_password)) },
-            visualTransformation = PasswordVisualTransformation(),
-            shape = RoundedCornerShape(4.dp),
-            colors =
-                TextFieldDefaults.textFieldColors(
-                    textColor = colorResource(id = R.color.black),
-                    focusedIndicatorColor = colorResource(id = R.color.teal_700),
-                    cursorColor = colorResource(id = R.color.teal_700),
-                    focusedLabelColor = colorResource(id = R.color.teal_700),
-                    unfocusedLabelColor = colorResource(id = R.color.teal_700),
-                ),
+            label = stringResource(id = R.string.hint_password),
+            isPassword = true,
+            modifier = Modifier.padding(top = 25.dp),
         )
-        Button(
+        AuthButton(
             onClick = { onLogin(username, password) },
-            modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors =
-                ButtonDefaults.buttonColors(
-                    backgroundColor = colorResource(id = R.color.teal_700),
-                    contentColor = Color.White,
-                ),
-            enabled = username.isNotBlank() && password.isNotBlank(),
-        ) {
-            Text(stringResource(id = R.string.login))
-        }
+            text = stringResource(id = R.string.login),
+            isEnabled = username.isNotBlank() && password.isNotBlank(),
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+        )
+
         if (authState.isLoading) {
             CircularProgressIndicator(color = colorResource(id = R.color.teal_700))
         }

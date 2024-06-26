@@ -11,11 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -63,14 +60,15 @@ fun SearchUsersScreen(
 
     Column(
         modifier =
-            Modifier
-                .background(color = colorResource(id = R.color.white))
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+        Modifier
+            .background(color = colorResource(id = R.color.white))
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
     ) {
-        OutlinedTextField(
-            value = query,
-            onValueChange = {
+
+        SearchTextField(
+            query = query,
+            onQueryChange = {
                 query = it
                 searchJob?.cancel()
                 searchJob =
@@ -81,19 +79,11 @@ fun SearchUsersScreen(
                         }
                     }
             },
-            label = { Text(stringResource(id = R.string.hint_search_by_username)) },
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors =
-                TextFieldDefaults.outlinedTextFieldColors(
-                    textColor = colorResource(id = R.color.black),
-                    backgroundColor = colorResource(id = R.color.white),
-                    focusedBorderColor = colorResource(id = R.color.teal_700),
-                    unfocusedBorderColor = colorResource(id = R.color.teal_700),
-                    cursorColor = colorResource(id = R.color.teal_700),
-                    focusedLabelColor = colorResource(id = R.color.teal_700),
-                    unfocusedLabelColor = colorResource(id = R.color.teal_700),
-                ),
+            label = stringResource(id = R.string.hint_search_by_username),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -102,10 +92,10 @@ fun SearchUsersScreen(
             searchUserScreenState.isLoading -> {
                 CircularProgressIndicator(
                     modifier =
-                        Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .size(24.dp)
-                            .align(Alignment.CenterHorizontally),
+                    Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .size(24.dp)
+                        .align(Alignment.CenterHorizontally),
                     color = colorResource(id = R.color.teal_700),
                 )
             }
@@ -115,17 +105,17 @@ fun SearchUsersScreen(
 
                 Column(
                     modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top,
                 ) {
                     Text(
                         modifier =
-                            Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(top = 50.dp),
+                        Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 50.dp),
                         fontSize = 16.sp,
                         text = "Error: ${searchUserScreenState.errorMessage}",
                     )
@@ -134,9 +124,9 @@ fun SearchUsersScreen(
                         painter = painterResource(id = R.drawable.ic_generic_error),
                         contentDescription = "Generic Error",
                         modifier =
-                            Modifier
-                                .size(100.dp)
-                                .padding(top = 30.dp),
+                        Modifier
+                            .size(100.dp)
+                            .padding(top = 30.dp),
                     )
                 }
             }
@@ -153,17 +143,17 @@ fun SearchUsersScreen(
                 } else {
                     Column(
                         modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .padding(16.dp),
+                        Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Top,
                     ) {
                         Text(
                             modifier =
-                                Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(top = 50.dp),
+                            Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = 50.dp),
                             fontSize = 16.sp,
                             text = stringResource(id = R.string.username_search_hint),
                         )
@@ -172,9 +162,9 @@ fun SearchUsersScreen(
                             painter = painterResource(id = R.drawable.ic_search),
                             contentDescription = "Search Image",
                             modifier =
-                                Modifier
-                                    .size(100.dp)
-                                    .padding(top = 30.dp),
+                            Modifier
+                                .size(100.dp)
+                                .padding(top = 30.dp),
                         )
                     }
                 }

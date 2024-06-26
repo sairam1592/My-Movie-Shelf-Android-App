@@ -12,9 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -173,10 +173,10 @@ fun HomeScreen(
         content = { padding ->
             Box(
                 modifier =
-                    Modifier
-                        .background(color = colorResource(id = R.color.white))
-                        .padding(horizontal = 16.dp)
-                        .fillMaxSize(),
+                Modifier
+                    .background(color = colorResource(id = R.color.white))
+                    .padding(horizontal = 16.dp)
+                    .fillMaxSize(),
             ) {
                 if (!authState.isAuthenticated) {
                     onLogoutSuccess()
@@ -185,9 +185,9 @@ fun HomeScreen(
                 if (!homeScreenState.userCategories.isNullOrEmpty()) {
                     Column(
                         modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .align(Alignment.TopCenter),
+                        Modifier
+                            .fillMaxSize()
+                            .align(Alignment.TopCenter),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         HomeButtonSection(
@@ -219,9 +219,9 @@ fun HomeScreen(
                 } else {
                     Column(
                         modifier =
-                            Modifier
-                                .padding(16.dp)
-                                .align(Alignment.TopCenter),
+                        Modifier
+                            .padding(16.dp)
+                            .align(Alignment.TopCenter),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         HomeButtonSection(
@@ -257,36 +257,17 @@ private fun HomeButtonSection(
     onSearchUsersClick: () -> Unit,
 ) {
     Row(modifier = Modifier.padding(top = 16.dp)) {
-        Button(
+        CTAButtonTealBorder(
+            text = stringResource(id = R.string.btn_create_your_list),
+            onClick = onCreateListClick,
             modifier = Modifier.wrapContentSize(),
-            shape = RoundedCornerShape(16.dp),
-            colors =
-                ButtonDefaults.buttonColors(
-                    backgroundColor = Color.White,
-                    contentColor = Color.Black,
-                ),
-            border = BorderStroke(2.dp, color = colorResource(id = R.color.teal_700)),
-            onClick = { onCreateListClick() },
-        ) {
-            Text(text = stringResource(id = R.string.btn_create_your_list), color = Color.Black)
-        }
-
-        Button(
-            modifier =
-                Modifier
-                    .padding(start = 16.dp)
-                .wrapContentSize(),
-            shape = RoundedCornerShape(16.dp),
-            colors =
-                ButtonDefaults.buttonColors(
-                    backgroundColor = Color.White,
-                    contentColor = Color.Black,
-                ),
-            border = BorderStroke(2.dp, color = colorResource(id = R.color.teal_700)),
-            onClick = { onSearchUsersClick() },
-        ) {
-            Text(text = stringResource(id = R.string.btn_search_users), color = Color.Black)
-        }
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        CTAButtonTealBorder(
+            text = stringResource(id = R.string.btn_search_users),
+            onClick = onSearchUsersClick,
+            modifier = Modifier.wrapContentSize(),
+        )
     }
 }
 

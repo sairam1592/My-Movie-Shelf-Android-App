@@ -62,20 +62,9 @@ fun SearchMoviesScreen(
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        OutlinedTextField(
-            colors =
-                TextFieldDefaults.outlinedTextFieldColors(
-                    textColor = colorResource(id = R.color.black),
-                    backgroundColor = colorResource(id = R.color.white),
-                    focusedBorderColor = colorResource(id = R.color.teal_700),
-                    unfocusedBorderColor = colorResource(id = R.color.teal_700),
-                    cursorColor = colorResource(id = R.color.teal_700),
-                    focusedLabelColor = colorResource(id = R.color.teal_700),
-                    unfocusedLabelColor = colorResource(id = R.color.teal_700),
-                ),
-            shape = RoundedCornerShape(16.dp),
-            value = query,
-            onValueChange = {
+        SearchTextField(
+            query = query,
+            onQueryChange = {
                 query = it
                 searchJob?.cancel()
                 searchJob =
@@ -88,8 +77,8 @@ fun SearchMoviesScreen(
                         }
                     }
             },
-            label = { Text(stringResource(id = R.string.hint_search_movies)) },
-            modifier = Modifier.fillMaxWidth(),
+            label = stringResource(id = R.string.hint_search_movies),
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
