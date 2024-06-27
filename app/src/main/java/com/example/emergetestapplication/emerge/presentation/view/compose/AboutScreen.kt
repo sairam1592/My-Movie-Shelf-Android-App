@@ -36,7 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.emergetestapplication.R
+import com.arun.emergetestapplication.R
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 import kotlinx.coroutines.launch
 

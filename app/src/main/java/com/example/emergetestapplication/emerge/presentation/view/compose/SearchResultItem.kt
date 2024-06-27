@@ -30,7 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.example.emergetestapplication.R
+import com.arun.emergetestapplication.R
 import com.example.emergetestapplication.emerge.data.model.movies.Movie
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
@@ -45,46 +45,46 @@ fun SearchResultItem(
         shape = RoundedCornerShape(12.dp),
         backgroundColor = colorResource(id = R.color.teal_700),
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .border(0.2.dp, Color.White, RoundedCornerShape(4))
-            .clickable { onClick() },
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .border(0.2.dp, Color.White, RoundedCornerShape(4))
+                .clickable { onClick() },
     ) {
         Row(
             modifier =
                 Modifier
                     .padding(horizontal = 8.dp)
                     .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Card(
                 modifier =
-                Modifier
-                    .size(40.dp),
+                    Modifier
+                        .size(40.dp),
                 shape = RoundedCornerShape(8.dp),
             ) {
                 SubcomposeAsyncImage(
                     model =
-                    ImageRequest
-                        .Builder(LocalContext.current)
-                        .data(
-                            data = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
-                        ).apply(
-                            block = fun ImageRequest.Builder.() {
-                                placeholder(
-                                    R.drawable.placeholder_dummy,
-                                )
-                                error(
-                                    R.drawable.placeholder_dummy,
-                                )
-                            },
-                        ).build(),
+                        ImageRequest
+                            .Builder(LocalContext.current)
+                            .data(
+                                data = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                            ).apply(
+                                block = fun ImageRequest.Builder.() {
+                                    placeholder(
+                                        R.drawable.placeholder_dummy,
+                                    )
+                                    error(
+                                        R.drawable.placeholder_dummy,
+                                    )
+                                },
+                            ).build(),
                     contentDescription = "Program Icon",
                     modifier =
-                    Modifier
-                        .background(Color.Gray)
-                        .clip(RoundedCornerShape(8.dp)),
+                        Modifier
+                            .background(Color.Gray)
+                            .clip(RoundedCornerShape(8.dp)),
                     contentScale = ContentScale.Crop,
                 )
             }
@@ -135,13 +135,13 @@ private fun MovieListItemPreview() {
         SearchResultItem(
             showDeleteIcon = true,
             movie =
-            Movie(
-                id = 1,
-                title = "MoneyBall",
-                overview = "Great movie about Baseball and Statistics.",
-                poster_path = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
-                release_date = "",
-                vote_average = 0.0,
+                Movie(
+                    id = 1,
+                    title = "MoneyBall",
+                    overview = "Great movie about Baseball and Statistics.",
+                    poster_path = "/mCU60YrUli3VfPVPOMDg26BgdhR.jpg",
+                    release_date = "",
+                    vote_average = 0.0,
                 ),
             onClick = {},
             removeMovie = {},

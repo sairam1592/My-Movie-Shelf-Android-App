@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.emergetestapplication.R
+import com.arun.emergetestapplication.R
 import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.presentation.view.state.AuthState
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
@@ -42,10 +42,10 @@ fun SignUpScreen(
 
     Column(
         modifier =
-        Modifier
-            .background(color = colorResource(id = R.color.white))
-            .fillMaxSize()
-            .padding(16.dp),
+            Modifier
+                .background(color = colorResource(id = R.color.white))
+                .fillMaxSize()
+                .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -68,14 +68,14 @@ fun SignUpScreen(
             value = username,
             onValueChange = { username = it },
             label = stringResource(id = R.string.hint_username),
-            modifier = Modifier.padding(top = 30.dp)
+            modifier = Modifier.padding(top = 30.dp),
         )
         AuthTextField(
             value = password,
             onValueChange = { password = it },
             label = stringResource(id = R.string.hint_password),
             isPassword = true,
-            modifier = Modifier.padding(top = 25.dp)
+            modifier = Modifier.padding(top = 25.dp),
         )
         AuthButton(
             onClick = {
@@ -93,9 +93,10 @@ fun SignUpScreen(
             },
             text = stringResource(id = R.string.btn_signup),
             isEnabled = username.isNotBlank() && password.isNotBlank(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
         )
 
         if (authState.isLoading) {

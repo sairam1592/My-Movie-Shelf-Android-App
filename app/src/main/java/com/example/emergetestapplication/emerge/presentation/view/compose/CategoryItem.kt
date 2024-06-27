@@ -33,7 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.emergetestapplication.R
+import com.arun.emergetestapplication.R
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
 import com.example.emergetestapplication.emerge.domain.mapper.MovieMappers.fromFbModelList

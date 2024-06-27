@@ -1,6 +1,6 @@
 package com.example.emergetestapplication.emerge.di.network
 
-import com.example.emergetestapplication.BuildConfig
+import com.arun.emergetestapplication.BuildConfig
 import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.network.APIService
 import dagger.Module
@@ -32,7 +32,7 @@ object NetworkModule {
                         .addHeader("accept", "application/json")
                         .addHeader(
                             "Authorization",
-                            BuildConfig.BEARER_TOKEN
+                            BuildConfig.BEARER_TOKEN,
                         ).build()
                 chain.proceed(request)
             }.build()

@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.example.emergetestapplication.R
+import com.arun.emergetestapplication.R
 import com.example.emergetestapplication.emerge.data.model.movies.Movie
 
 @Composable
@@ -33,46 +33,46 @@ fun MovieItem(movie: Movie) {
         shape = RoundedCornerShape(8.dp),
         backgroundColor = colorResource(id = R.color.teal_700),
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(4.dp)
-            .border(0.2.dp, Color.White, RoundedCornerShape(4)),
+            Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+                .border(0.2.dp, Color.White, RoundedCornerShape(4)),
     ) {
         Row(
             modifier =
-            Modifier
-                .padding(horizontal = 8.dp)
-                .fillMaxWidth(),
+                Modifier
+                    .padding(horizontal = 8.dp)
+                    .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Card(
                 modifier =
-                Modifier
-                    .size(30.dp)
-                    .padding(4.dp),
+                    Modifier
+                        .size(30.dp)
+                        .padding(4.dp),
                 shape = RoundedCornerShape(4.dp),
             ) {
                 SubcomposeAsyncImage(
                     model =
-                    ImageRequest
-                        .Builder(LocalContext.current)
-                        .data(
-                            data = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
-                        ).apply(
-                            block = fun ImageRequest.Builder.() {
-                                placeholder(
-                                    R.drawable.placeholder_dummy,
-                                )
-                                error(
-                                    R.drawable.placeholder_dummy,
-                                )
-                            },
-                        ).build(),
+                        ImageRequest
+                            .Builder(LocalContext.current)
+                            .data(
+                                data = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                            ).apply(
+                                block = fun ImageRequest.Builder.() {
+                                    placeholder(
+                                        R.drawable.placeholder_dummy,
+                                    )
+                                    error(
+                                        R.drawable.placeholder_dummy,
+                                    )
+                                },
+                            ).build(),
                     contentDescription = "Program Icon",
                     modifier =
-                    Modifier
-                        .background(Color.Gray)
-                        .clip(RoundedCornerShape(4.dp)),
+                        Modifier
+                            .background(Color.Gray)
+                            .clip(RoundedCornerShape(4.dp)),
                     contentScale = ContentScale.Crop,
                 )
             }

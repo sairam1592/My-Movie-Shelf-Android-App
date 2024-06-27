@@ -30,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.emergetestapplication.R
+import com.arun.emergetestapplication.R
 import com.example.emergetestapplication.emerge.data.model.movies.Movie
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
@@ -50,9 +50,9 @@ fun MyNewListItem(
         shape = RoundedCornerShape(16.dp),
         backgroundColor = colorResource(id = R.color.teal_700),
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
+            Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -64,10 +64,10 @@ fun MyNewListItem(
                 fontWeight = FontWeight.Medium,
                 maxLines = 2,
                 modifier =
-                Modifier
-                    .border(1.dp, Color.White, RoundedCornerShape(8.dp))
-                    .padding(horizontal = 15.dp, vertical = 10.dp)
-                    .align(Alignment.CenterHorizontally),
+                    Modifier
+                        .border(1.dp, Color.White, RoundedCornerShape(8.dp))
+                        .padding(horizontal = 15.dp, vertical = 10.dp)
+                        .align(Alignment.CenterHorizontally),
             )
 
             if (selectedMovies.isNotEmpty()) {
@@ -76,9 +76,9 @@ fun MyNewListItem(
                 selectedMovies.let { movies ->
                     LazyColumn(
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .heightIn(max = 400.dp),
+                            Modifier
+                                .fillMaxWidth()
+                                .heightIn(max = 400.dp),
                     ) {
                         items(movies) { movie ->
                             SearchResultItem(showDeleteIcon = true, movie = movie, onClick = {}, removeMovie = removeMovie)
@@ -93,9 +93,9 @@ fun MyNewListItem(
                         fontSize = 14.sp,
                         maxLines = 2,
                         modifier =
-                        Modifier
-                            .padding(top = 12.dp)
-                            .align(Alignment.CenterHorizontally),
+                            Modifier
+                                .padding(top = 12.dp)
+                                .align(Alignment.CenterHorizontally),
                     )
                 }
             } else {
@@ -105,9 +105,9 @@ fun MyNewListItem(
                     fontSize = 14.sp,
                     maxLines = 2,
                     modifier =
-                    Modifier
-                        .padding(top = 18.dp)
-                        .align(Alignment.CenterHorizontally),
+                        Modifier
+                            .padding(top = 18.dp)
+                            .align(Alignment.CenterHorizontally),
                 )
             }
 

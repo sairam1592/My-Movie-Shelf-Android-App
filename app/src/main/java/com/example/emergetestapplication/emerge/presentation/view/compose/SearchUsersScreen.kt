@@ -30,7 +30,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.emergetestapplication.R
+import com.arun.emergetestapplication.R
 import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
@@ -60,12 +60,11 @@ fun SearchUsersScreen(
 
     Column(
         modifier =
-        Modifier
-            .background(color = colorResource(id = R.color.white))
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
+            Modifier
+                .background(color = colorResource(id = R.color.white))
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
     ) {
-
         SearchTextField(
             query = query,
             onQueryChange = {
@@ -83,7 +82,7 @@ fun SearchUsersScreen(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
+                    .padding(top = 16.dp),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -92,10 +91,10 @@ fun SearchUsersScreen(
             searchUserScreenState.isLoading -> {
                 CircularProgressIndicator(
                     modifier =
-                    Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .size(24.dp)
-                        .align(Alignment.CenterHorizontally),
+                        Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .size(24.dp)
+                            .align(Alignment.CenterHorizontally),
                     color = colorResource(id = R.color.teal_700),
                 )
             }
@@ -105,17 +104,17 @@ fun SearchUsersScreen(
 
                 Column(
                     modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
+                        Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top,
                 ) {
                     Text(
                         modifier =
-                        Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = 50.dp),
+                            Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = 50.dp),
                         fontSize = 16.sp,
                         text = "Error: ${searchUserScreenState.errorMessage}",
                     )
@@ -124,9 +123,9 @@ fun SearchUsersScreen(
                         painter = painterResource(id = R.drawable.ic_generic_error),
                         contentDescription = "Generic Error",
                         modifier =
-                        Modifier
-                            .size(100.dp)
-                            .padding(top = 30.dp),
+                            Modifier
+                                .size(100.dp)
+                                .padding(top = 30.dp),
                     )
                 }
             }
@@ -143,17 +142,17 @@ fun SearchUsersScreen(
                 } else {
                     Column(
                         modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
+                            Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Top,
                     ) {
                         Text(
                             modifier =
-                            Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(top = 50.dp),
+                                Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(top = 50.dp),
                             fontSize = 16.sp,
                             text = stringResource(id = R.string.username_search_hint),
                         )
@@ -162,9 +161,9 @@ fun SearchUsersScreen(
                             painter = painterResource(id = R.drawable.ic_search),
                             contentDescription = "Search Image",
                             modifier =
-                            Modifier
-                                .size(100.dp)
-                                .padding(top = 30.dp),
+                                Modifier
+                                    .size(100.dp)
+                                    .padding(top = 30.dp),
                         )
                     }
                 }

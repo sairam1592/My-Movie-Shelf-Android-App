@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.emergetestapplication.R
+import com.arun.emergetestapplication.R
 import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 
 @Composable
@@ -30,10 +30,10 @@ fun StartUpScreen(
 ) {
     Column(
         modifier =
-        Modifier
-            .background(color = colorResource(id = R.color.white))
-            .fillMaxSize()
-            .padding(16.dp),
+            Modifier
+                .background(color = colorResource(id = R.color.white))
+                .fillMaxSize()
+                .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -41,7 +41,7 @@ fun StartUpScreen(
             text = stringResource(id = R.string.startup_screen_title),
             color = Color.Black,
             fontSize = 22.sp,
-            maxLines = 1
+            maxLines = 1,
         )
 
         Text(
@@ -52,21 +52,21 @@ fun StartUpScreen(
             text =
                 "- Curate multiple Favourite List and Add Top 5 Movies to your shelf.\n" +
                     "- Search your favourite movie and add it to your list.\n" +
-                "- Delete the list and start over if you wish.\n" +
-                "- Seach and view other's favourite list too.\n\n" +
-                "** Don't have an account? Signup now to get started.\n" +
-                "** Already have an account? Login now to create/access your list.",
-                color = Color.DarkGray,
+                    "- Delete the list and start over if you wish.\n" +
+                    "- Seach and view other's favourite list too.\n\n" +
+                    "** Don't have an account? Signup now to get started.\n" +
+                    "** Already have an account? Login now to create/access your list.",
+            color = Color.DarkGray,
             fontSize = 16.sp,
             lineHeight = 25.sp,
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
         )
 
         Button(
             onClick = onNavigateToLogin,
             modifier =
-            Modifier
-                .padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
+                Modifier
+                    .padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
                     .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors =
@@ -88,7 +88,7 @@ fun StartUpScreen(
                 ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(id = R.color.teal_700),
                     contentColor = Color.White,
-            ),
+                ),
         ) {
             Text(stringResource(id = R.string.signup_caps))
         }

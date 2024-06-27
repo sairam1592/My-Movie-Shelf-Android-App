@@ -16,11 +16,11 @@ val gradleProperties = Properties()
 gradleProperties.load(FileInputStream(secretPropertiesFile))
 
 android {
-    namespace = "com.example.emergetestapplication"
+    namespace = "com.arun.emergetestapplication"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.emergetestapplication"
+        applicationId = "com.arun.emergetestapplication"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

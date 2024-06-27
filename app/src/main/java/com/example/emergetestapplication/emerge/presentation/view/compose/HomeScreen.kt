@@ -44,7 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.emergetestapplication.R
+import com.arun.emergetestapplication.R
 import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.data.model.firebase.FbMovieModel
@@ -123,7 +123,7 @@ fun HomeScreen(
                     )
                 },
                 actions = {
-                    Row (modifier = Modifier.wrapContentSize()) {
+                    Row(modifier = Modifier.wrapContentSize()) {
                         TextButton(
                             modifier = Modifier.padding(end = 10.dp),
                             shape = RoundedCornerShape(16.dp),
@@ -131,8 +131,8 @@ fun HomeScreen(
                             colors =
                                 ButtonDefaults.buttonColors(
                                     backgroundColor = colorResource(id = R.color.teal_700),
-                                contentColor = colorResource(id = R.color.white),
-                            ),
+                                    contentColor = colorResource(id = R.color.white),
+                                ),
                             onClick = {
                                 onLogout()
                                 Toast
@@ -173,10 +173,10 @@ fun HomeScreen(
         content = { padding ->
             Box(
                 modifier =
-                Modifier
-                    .background(color = colorResource(id = R.color.white))
-                    .padding(horizontal = 16.dp)
-                    .fillMaxSize(),
+                    Modifier
+                        .background(color = colorResource(id = R.color.white))
+                        .padding(horizontal = 16.dp)
+                        .fillMaxSize(),
             ) {
                 if (!authState.isAuthenticated) {
                     onLogoutSuccess()
@@ -185,9 +185,9 @@ fun HomeScreen(
                 if (!homeScreenState.userCategories.isNullOrEmpty()) {
                     Column(
                         modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .align(Alignment.TopCenter),
+                            Modifier
+                                .fillMaxSize()
+                                .align(Alignment.TopCenter),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         HomeButtonSection(
@@ -219,9 +219,9 @@ fun HomeScreen(
                 } else {
                     Column(
                         modifier =
-                        Modifier
-                            .padding(16.dp)
-                            .align(Alignment.TopCenter),
+                            Modifier
+                                .padding(16.dp)
+                                .align(Alignment.TopCenter),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         HomeButtonSection(

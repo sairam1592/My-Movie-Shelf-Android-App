@@ -1,7 +1,7 @@
 package com.example.emergetestapplication.emerge
 
 import android.app.Application
-import com.example.emergetestapplication.BuildConfig
+import com.arun.emergetestapplication.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
