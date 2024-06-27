@@ -18,6 +18,7 @@ object AppConstants {
     const val TOAST_LOGIN_SUCCESS = "Login Successful"
     const val TOAST_SIGNUP_SUCCESS = "Sign Up Successful"
     const val TOAST_CATEGORY_MODIFIED = "Category List Modified Successfully!"
+    const val TOAST_ACCOUNT_DELETED = "Account deleted successfully!"
 
     // Firebase Strings
     const val FIREBASE_COLLECTION_NAME = "users"

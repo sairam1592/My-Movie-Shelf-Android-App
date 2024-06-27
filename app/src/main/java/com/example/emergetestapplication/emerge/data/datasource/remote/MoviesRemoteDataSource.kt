@@ -25,4 +25,6 @@ interface MoviesRemoteDataSource {
         categoryName: String,
         movieIds: List<Int>,
     )
+
+    suspend fun deleteAccountFromFirebase(username: String): Result<Unit>
 }

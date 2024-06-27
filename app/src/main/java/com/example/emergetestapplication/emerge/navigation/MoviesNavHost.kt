@@ -1,10 +1,13 @@
 package com.example.emergetestapplication.emerge.navigation
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -58,12 +61,46 @@ fun MoviesNavHost(
     authViewModel: AuthViewModel,
     moviesViewModel: MoviesViewModel,
 ) {
+    val context = LocalContext.current
     var selectedMovies by remember { mutableStateOf<List<Movie>>(emptyList()) }
+    val deleteAccountState by moviesViewModel.deleteAccountState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(deleteAccountState) {
+        deleteAccountState?.let {
+            if (it.isSuccess) {
+                Toast
+                    .makeText(context, AppConstants.TOAST_ACCOUNT_DELETED, Toast.LENGTH_SHORT)
+                    .show()
+                authViewModel.logout()
+                navController.navigate(Screen.Startup.route) {
+                    popUpTo(Screen.Home.route) { inclusive = true }
+                }
+                moviesViewModel.resetDeleteAccountState()
+            } else if (it.isFailure) {
+                Toast
+                    .makeText(
+                        context,
+                        "Failed to delete account: ${it.exceptionOrNull()?.message}",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                moviesViewModel.resetDeleteAccountState()
+            }
+        }
+    }
 
     NavHost(navController = navController, startDestination = Screen.Startup.route) {
         composable(Screen.About.route) {
             AboutScreen(
                 navController = navController,
+                onDeleteAccount = {
+                    authViewModel.authState.value.user?.let { user ->
+                        authViewModel.deleteAccount(user.username)
+                        moviesViewModel.deleteAccount(user.username)
+                    }
+                    navController.navigate(Screen.Startup.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
+                    }
+                },
             )
         }
 

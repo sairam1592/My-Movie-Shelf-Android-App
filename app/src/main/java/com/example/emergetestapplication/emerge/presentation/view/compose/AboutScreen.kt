@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -28,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,7 +41,10 @@ import com.example.emergetestapplication.ui.theme.EmergeTestApplicationTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun AboutScreen(navController: NavHostController) {
+fun AboutScreen(
+    navController: NavHostController,
+    onDeleteAccount: () -> Unit,
+) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -69,11 +75,11 @@ fun AboutScreen(navController: NavHostController) {
         content = { paddingValues ->
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .background(color = Color.White)
-                        .padding(paddingValues = PaddingValues(16.dp))
-                        .verticalScroll(rememberScrollState()),
+                Modifier
+                    .fillMaxSize()
+                    .background(color = Color.White)
+                    .padding(paddingValues = PaddingValues(16.dp))
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -81,9 +87,9 @@ fun AboutScreen(navController: NavHostController) {
                     shape = RoundedCornerShape(16.dp),
                     backgroundColor = colorResource(id = R.color.teal_700),
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
@@ -121,9 +127,9 @@ fun AboutScreen(navController: NavHostController) {
                     shape = RoundedCornerShape(16.dp),
                     backgroundColor = colorResource(id = R.color.teal_700),
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
@@ -153,6 +159,15 @@ fun AboutScreen(navController: NavHostController) {
                         )
                     }
                 }
+
+                CTAButtonTealBorder(
+                    text = stringResource(id = R.string.delete_account),
+                    onClick = onDeleteAccount,
+                    modifier =
+                        Modifier
+                            .wrapContentSize()
+                            .padding(top = 30.dp),
+                        )
             }
         },
     )
@@ -169,6 +184,8 @@ fun AboutScreen(navController: NavHostController) {
 @Composable
 fun AboutScreenPreview() {
     EmergeTestApplicationTheme {
-        AboutScreen(navController = NavHostController(context = LocalContext.current))
+        AboutScreen(
+            navController = NavHostController(context = LocalContext.current),
+            onDeleteAccount = {})
     }
 }

@@ -44,4 +44,10 @@ class AuthLocalDataSourceImpl
             }
 
         override suspend fun logout(): Result<Unit> = Result.success(Unit)
+
+        override suspend fun deleteAccount(username: String): Result<Unit> =
+            withContext(Dispatchers.IO) {
+                userDao.deleteUser(username)
+                Result.success(Unit)
+        }
     }

@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,6 +56,14 @@ fun SignUpScreen(
             maxLines = 1,
         )
 
+        Text(
+            modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
+            text = stringResource(id = R.string.signup_desc),
+            color = Color.Red,
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center,
+        )
+
         AuthTextField(
             value = username,
             onValueChange = { username = it },
@@ -84,7 +93,9 @@ fun SignUpScreen(
             },
             text = stringResource(id = R.string.btn_signup),
             isEnabled = username.isNotBlank() && password.isNotBlank(),
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         )
 
         if (authState.isLoading) {

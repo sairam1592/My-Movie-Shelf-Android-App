@@ -5,6 +5,7 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="modify">Modify</string>
+    <string name="delete_account">Delete Account</string>
     <string name="go_back">Go Back</string>
     <string name="stay">Stay</string>
     <string name="unsaved_changes_title">You have some unsaved changes?</string>
@@ -20,7 +21,7 @@
     <string name="start_creating_list">Start creating your list now!</string>
     <string name="btn_create_your_list">Create Your List</string>
     <string name="btn_search_users">Search Users</string>
-    <string name="login_screen_title">Please Login to Access Movies</string>
+    <string name="login_screen_title">Login to Access Movies</string>
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="login">Login</string>
@@ -32,9 +33,10 @@
     <string name="hint_search_movies">Search A Movie to Add to Your List</string>
     <string name="hint_search_by_username">Search by Username</string>
     <string name="username_search_hint">Try Searching entire Username to view their Favourite Lists!</string>
-    <string name="signup_title">Please Sign Up to Access Movies</string>
+    <string name="signup_title">Sign Up to Access Movies</string>
+    <string name="signup_desc">NOTE: Please do not give any Sensitive login information, rather use dummy username/password!\n\n Also you can delete your data anytime!!</string>
     <string name="btn_signup">Sign Up</string>
-    <string name="startup_screen_title">Hi, Welcome to Your Movies App</string>
+    <string name="startup_screen_title">Welcome to Your Movies Shelf</string>
     <string name="select_movies_to_modify">Select movies to remove from your list:</string>
     <string name="modify_cta_desc">Are you sure you want to modify?</string>
 </resources>

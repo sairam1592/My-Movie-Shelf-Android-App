@@ -162,4 +162,17 @@ class MoviesRemoteDataSourceImpl
                     continuation.resumeWithException(exception)
                 }
         }
+
+        override suspend fun deleteAccountFromFirebase(username: String): Result<Unit> =
+            suspendCoroutine { continuation ->
+                fireStore
+                    .collection(FIREBASE_COLLECTION_NAME)
+                    .document(username)
+                    .delete()
+                    .addOnSuccessListener {
+                        continuation.resume(Result.success(Unit))
+                    }.addOnFailureListener { exception ->
+                        continuation.resumeWithException(exception)
+                }
+        }
     }

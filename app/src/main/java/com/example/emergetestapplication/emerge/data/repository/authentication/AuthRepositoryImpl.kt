@@ -22,4 +22,6 @@ class AuthRepositoryImpl
         ): Result<User?> = localDataSource.login(username, password)
 
         override suspend fun logout(): Result<Unit> = localDataSource.logout()
+
+        override suspend fun deleteAccount(username: String): Result<Unit> = localDataSource.deleteAccount(username)
     }

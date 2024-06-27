@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.emergetestapplication.emerge.common.AppConstants
 import com.example.emergetestapplication.emerge.data.model.user.User
 import com.example.emergetestapplication.emerge.domain.usecase.CheckUserExistsUseCase
+import com.example.emergetestapplication.emerge.domain.usecase.DeleteAccountFromDBUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.LoginUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.LogoutUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.SignUpUseCase
@@ -24,6 +25,7 @@ class AuthViewModel
         private val checkUserExistsUseCase: CheckUserExistsUseCase,
         private val loginUseCase: LoginUseCase,
         private val logoutUseCase: LogoutUseCase,
+        private val deleteAccountUseCase: DeleteAccountFromDBUseCase,
     ) : ViewModel() {
         private val _authState = MutableStateFlow(AuthState())
         val authState: StateFlow<AuthState> = _authState.asStateFlow()
@@ -118,4 +120,10 @@ class AuthViewModel
                 }
             }
         }
+
+        fun deleteAccount(username: String) {
+            viewModelScope.launch {
+                deleteAccountUseCase(username)
+            }
+    }
     }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.emergetestapplication.emerge.data.model.firebase.FbCategoryModel
 import com.example.emergetestapplication.emerge.domain.usecase.AddCategoryToFireBaseDBUseCase
+import com.example.emergetestapplication.emerge.domain.usecase.DeleteAccountFromFirebaseUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.DeleteCategoryUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.GetUserCategoriesUseCase
 import com.example.emergetestapplication.emerge.domain.usecase.RemoveMoviesFromCategoryUseCase
@@ -28,6 +29,7 @@ class MoviesViewModel
         private val addCategoryUseCase: AddCategoryToFireBaseDBUseCase,
         private val deleteCategoryUseCase: DeleteCategoryUseCase,
         private val removeMoviesFromCategoryUseCase: RemoveMoviesFromCategoryUseCase,
+        private val deleteAccountFromFirebaseUseCase: DeleteAccountFromFirebaseUseCase,
         private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private val _moviesState = MutableStateFlow(MoviesState())
@@ -47,6 +49,9 @@ class MoviesViewModel
 
         private val _modifyCategoryState = MutableStateFlow<Result<Unit>?>(null)
         val modifyCategoryState = _modifyCategoryState.asStateFlow()
+
+        private val _deleteAccountState = MutableStateFlow<Result<Unit>?>(null)
+        val deleteAccountState = _deleteAccountState.asStateFlow()
 
         companion object {
             private const val KEY_TITLE = "title"
@@ -172,6 +177,22 @@ class MoviesViewModel
                 }
             }
         }
+
+        fun deleteAccount(username: String) {
+            viewModelScope.launch {
+                runCatching {
+                    deleteAccountFromFirebaseUseCase(username)
+                }.onSuccess {
+                    _deleteAccountState.value = Result.success(Unit)
+                }.onFailure { exception ->
+                    _deleteAccountState.value = Result.failure(exception)
+                }
+            }
+        }
+
+        fun resetDeleteAccountState() {
+            _deleteAccountState.value = null
+    }
 
         fun setErrorMessageForSearchScreen(errorMessage: String) {
             _searchUserScreenState.value =

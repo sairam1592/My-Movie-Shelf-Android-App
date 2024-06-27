@@ -41,4 +41,7 @@ class MovieRepositoryImpl
         ) {
             moviesRemoteDataSource.removeMoviesFromCategory(username, categoryName, movieIds)
     }
-}
+
+        override suspend fun deleteAccountFromFirebase(username: String): Result<Unit> =
+            moviesRemoteDataSource.deleteAccountFromFirebase(username)
+    }
