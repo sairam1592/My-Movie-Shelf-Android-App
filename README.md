@@ -1,5 +1,4 @@
-# Emerge-Android-Test-Application
-Senior Android Test Project for Emerge, Auckland
+# MY MOVIE SHELF ANDROID APP (A Take Home Assessment test project for Emerge, Auckland)
 - TOP5 Movies CRUD functionality
 - The project consists of a simple mobile app for movie fans to showcase ordered lists of their favorite movies. Users should be able to create multiple "Top 5" lists that will be displayed on their profile.
 
