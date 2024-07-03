@@ -1,4 +1,4 @@
-# MY MOVIE SHELF ANDROID APP (A Take Home Assessment project for Emerge, Auckland)
+# MY MOVIE SHELF ANDROID APP
 - I took this opportunity to use latest Android tools and technologies to build this massive fully functional Android App
 - Currently submitted for Review to Google Play Console, awaiting approval and release to Google Play Store
 - TOP 5 Movies CRUD functionality
