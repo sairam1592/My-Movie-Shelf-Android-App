@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -8,12 +11,16 @@ plugins {
     id("com.google.gms.google-services")
 }
 
+val secretPropertiesFile = rootProject.file("secret.properties")
+val gradleProperties = Properties()
+gradleProperties.load(FileInputStream(secretPropertiesFile))
+
 android {
-    namespace = "com.example.emergetestapplication"
+    namespace = "com.arun.emergetestapplication"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.emergetestapplication"
+        applicationId = "com.arun.emergetestapplication"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -23,6 +30,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField(
+            "String",
+            "BEARER_TOKEN",
+            gradleProperties.getProperty("BEARER_TOKEN"),
+        )
     }
 
     buildTypes {
@@ -100,11 +113,13 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation("com.google.code.gson:gson:2.8.6")
 
     // Logger
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     // Firebase
+    implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-analytics")
 
